@@ -8,6 +8,3 @@ signUpButton.addEventListener('click', () =>
 signInButton.addEventListener('click', () =>
     container.classList.remove('right-panel-active'));
 
-// https://Github.com/YasinDehfuli
-// 	 https://Codepen.io/YasinDehfuli
-// Disigned By Nisay
