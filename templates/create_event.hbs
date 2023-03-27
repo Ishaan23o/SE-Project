@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../public/create_event.css">
+</head>
+<body>
+    <div class="container">
+        <div class="row justify-content-center">
+        <div class="col-md-5">
+         <div class="card">
+          
+            <div class="card-body py-md-4">
+             <form action="/event_created" method="post">
+                <div class="form-group">
+                   <input type="text" name="event_name" class="form-control" id="name" placeholder="event name">
+              </div>
+              <div class="form-group">
+                   <input type="date" name="event_date" class="form-control" id="date" placeholder="event date">
+                                  </div>
+                                  
+                                
+         <div class="form-group">
+           <input type="time" name="event_time" class="form-control" id="time" placeholder="time">
+         </div>
+         <div class="d-flex flex-row align-items-center justify-content-between">
+                                      <button class="btn btn-primary">submit</button>
+                </div>
+             </form>
+           </div>
+        </div>
+      </div>
+      </div>
+      </div>
+    
+</body>
+</html>
