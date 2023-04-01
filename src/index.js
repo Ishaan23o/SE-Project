@@ -17,6 +17,10 @@ app.get("/",(req,res)=>{
 app.get("/new_event",(req,res)=>{
   res.render("create_event")
 })
+app.get("/show_event",async (req,res)=>{
+let find_elem=await event_collection.find({email:cur_session});
+  res.render("show_events",{data:find_elem})
+})
 app.post("/signup",async(req,res)=>{
 const data={
     name:req.body.signup_name,
@@ -25,16 +29,27 @@ const data={
 }
 await signup_collection.insertMany([data])
 })
-app.post("/event_created",async(req,res)=>{
+app.post("/new_event",async(req,res)=>{
+  let cur_status=""
+  let cur_date=new Date();
+  let req_date=new Date(req.body.event_date)
+if(req_date>cur_date)
+cur_status="upcoming"
+else if(req_date<cur_date)
+cur_status="expired"
+else
+cur_status="today"
+console.log(req.body.event_type)
   const data={
       email:cur_session,
       event_name:req.body.event_name,
       date:req.body.event_date,
-      time:req.body.event_time
-      
-
+      time:req.body.event_time,
+      type:req.body.event_type,
+      status:cur_status
   }
   await event_collection.insertMany([data])
+
   })
 app.post("/login",async(req,res)=>{
     const data={

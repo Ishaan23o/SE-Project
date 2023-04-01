@@ -1,41 +1,74 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="../public/create_event.css">
-</head>
-<body>
-    <div class="container">
-        <div class="row justify-content-center">
-        <div class="col-md-5">
-         <div class="card">
-          
-            <div class="card-body py-md-4">
-             <form action="/event_created" method="post">
-                <div class="form-group">
-                   <input type="text" name="event_name" class="form-control" id="name" placeholder="event name">
-              </div>
-              <div class="form-group">
-                   <input type="date" name="event_date" class="form-control" id="date" placeholder="event date">
-                                  </div>
-                                  
-                                
-         <div class="form-group">
-           <input type="time" name="event_time" class="form-control" id="time" placeholder="time">
-         </div>
-         <div class="d-flex flex-row align-items-center justify-content-between">
-                                      <button class="btn btn-primary">submit</button>
-                </div>
-             </form>
-           </div>
-        </div>
-      </div>
-      </div>
-      </div>
-    
-</body>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>Bootstrap 4, from LayoutIt!</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="../public/event_css/bootstrap.min.css" rel="stylesheet">
+    <link href="../public/event_css/style.css" rel="stylesheet">
+
+  </head>
+  <body>
+
+    <div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<form action="/new_event" method="post">
+				<div class="form-group">
+					 
+					<label for="event_name">
+						Event name
+					</label>
+					<input class="form-control" name="event_name" id="event_name">
+				</div>
+				<div class="form-group">
+					 
+					<label for="event_date">
+						Event date
+					</label>
+					<input type="date" class="form-control" name="event_date" id="event_date">
+				</div>
+				<div class="form-group">
+					 
+					<label for="event_time">
+						Event Time
+					</label>
+					<input type="time" class="form-control" name="event_time" id="event_time">
+				</div>
+				<div class="form-group">
+					 
+					<label for="event_type">
+						Event type
+					</label>
+					<select name="event_type" id="event_type" class="form-control">
+						<option value="online">online</option>
+						<option value="offline">offline</option>
+						<option value="hybrid">hybrid</option>
+					  </select>
+				</div>
+				<div class="form-group">
+					 
+					<label for="exampleInputFile">
+						Or upload the excel sheet
+					</label>
+					<input type="file" class="form-control-file" id="exampleInputFile">
+				</div>
+				<button type="submit" class="btn btn-primary">
+					Submit
+				</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+    <script src="../public/js/jquery.min.js"></script>
+    <script src="../public/js/bootstrap.min.js"></script>
+    <script src="../public/js/scripts.js"></script>
+  </body>
 </html>
