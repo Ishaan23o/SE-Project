@@ -23,10 +23,8 @@ const events=new mongoose.Schema({
                 required:true},
                 type:{
                     type:String,
-                    required:true},
-                    status:{
-                        type:String,
-                        required:true}
+                    required:true}
+                  
             }
 
 )
