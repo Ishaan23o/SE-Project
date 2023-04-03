@@ -34,6 +34,7 @@ app.get("/show_event", async (req, res) => {
   }
   res.render("show_events", { data: find_elem })
 })
+
 app.post("/signup", async (req, res) => {
   const data = {
     name: req.body.signup_name,
