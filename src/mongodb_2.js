@@ -14,10 +14,20 @@ const sign_up_schema=new mongoose.Schema({
     },
     email:{
         type:String,
-        required:true},
-        password:{
-            type:String,
-            required:true}
+        required:true
+    },
+    password:{
+        type:String,
+        required:true
+    },
+    contact:{
+        type:Number,
+        required:true
+    },
+    organisation:{
+        type:String,
+        default:"N/A"
+    }
     }
 )
 const collection=new mongoose.model("collection1",sign_up_schema)

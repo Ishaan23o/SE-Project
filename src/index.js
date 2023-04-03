@@ -39,7 +39,9 @@ app.post("/signup", async (req, res) => {
   const data = {
     name: req.body.signup_name,
     email: req.body.signup_email,
-    password: req.body.signup_password
+    password: req.body.signup_password,
+    contact: req.body.signup_contact,
+    organisation: req.body.signup_organisation
   }
   await signup_collection.insertMany([data])
 })
