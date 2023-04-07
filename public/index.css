@@ -48,3 +48,7 @@ html{font-family:sans-serif;-ms-text-size-adjust:100%;-webkit-text-size-adjust:1
   font-style: normal;
   font-display: swap;
 }
+
+.wow{
+  display: inline-flex;
+}
