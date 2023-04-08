@@ -17,8 +17,13 @@ const events = new mongoose.Schema({
         required: true
     },
     date: {
-        type: Date,
-        required: true
+        registration: {
+            type: Date,
+        },
+        event_date: {
+            type: Date,
+            required: true
+        }
     },
     time: {
         type: String,
@@ -27,6 +32,31 @@ const events = new mongoose.Schema({
     type: {
         type: String,
         required: true
+    },
+    description: {
+        type: String,
+        required: true
+    },
+    contact: {
+        type: {},
+        required: true
+    },
+    requirements: {
+        type: {}
+    },
+    fees: {
+        type: Number,
+        required: true
+    },
+    scope: {
+        scope: {
+            type: String,
+            required: true
+        },
+        code: {
+            type: String,
+            default: "PUBLIC"
+        }
     }
 
 }

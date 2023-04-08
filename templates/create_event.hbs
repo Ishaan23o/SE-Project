@@ -1,74 +1,143 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta charset="utf-8">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <title>create_event</title>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <meta name="description" content="Source code generated using layoutit.com">
-    <meta name="author" content="LayoutIt!">
+	<title>create_event</title>
 
-    <link href="../public/event_css/bootstrap.min.css" rel="stylesheet">
-    <link href="../public/event_css/style.css" rel="stylesheet">
+	<meta name="description" content="Source code generated using layoutit.com">
+	<meta name="author" content="LayoutIt!">
 
-  </head>
-  <body>
+	<link href="../public/event_css/bootstrap.min.css" rel="stylesheet">
+	<link href="../public/event_css/style.css" rel="stylesheet">
 
-    <div class="container-fluid">
-	<div class="row">
-		<div class="col-md-12">
-			<form action="/new_event" method="post">
-				<div class="form-group">
-					 
-					<label for="event_name">
-						Event name
-					</label>
-					<input class="form-control" name="event_name" id="event_name" required>
-				</div>
-				<div class="form-group">
-					 
-					<label for="event_date">
-						Event date
-					</label>
-					<input type="date" class="form-control" name="event_date" id="event_date" required>
-				</div>
-				<div class="form-group">
-					 
-					<label for="event_time">
-						Event Time
-					</label>
-					<input type="time" class="form-control" name="event_time" id="event_time" required>
-				</div>
-				<div class="form-group">
-					 
-					<label for="event_type">
-						Event type
-					</label>
-					<select name="event_type" id="event_type" class="form-control" required>
-						<option value="online">online</option>
-						<option value="offline">offline</option>
-						<option value="hybrid">hybrid</option>
-					  </select>
-				</div>
-				<div class="form-group">
-					 
-					<label for="exampleInputFile">
-					upload a brochure(if any)
-					</label>
-					<input type="file" class="form-control-file" id="exampleInputFile">
-				</div>
-				<button type="submit" class="btn btn-primary">
-					Submit
-				</button>
-			</form>
+</head>
+
+<body>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-md-12">
+				<form action="/new_event" method="post">
+					<div class="form-group">
+						<label for="event_name">
+							Event name
+						</label>
+						<input class="form-control" name="event_name" id="event_name" required>
+					</div>
+					<div class="form-group">
+						<label for="event_date">
+							Event date
+						</label>
+						<input type="date" class="form-control" name="event_date" id="event_date" required>
+					</div>
+					<div class="form-group">
+						<label for="registration_date">
+							Registration deadline (Optional)
+						</label>
+						<input type="date" class="form-control" name="registration_date" id="registration_date"
+							value="1970-01-01">
+					</div>
+					<div class="form-group">
+						<label for="event_time">
+							Event Time
+						</label>
+						<input type="time" class="form-control" name="event_time" id="event_time" required>
+					</div>
+					<div class="form-group">
+						<label for="event_type">
+							Event type
+						</label>
+						<select name="event_type" id="event_type" class="form-control" required>
+							<option value="online">online</option>
+							<option value="offline">offline</option>
+							<option value="hybrid">hybrid</option>
+						</select>
+					</div>
+					<div class="form-group">
+						<label for="event_desc">
+							Event description
+						</label>
+						<textarea class="form-control" name="event_desc" id="event_desc" required></textarea>
+					</div>
+					<div class="form-group">
+						<label for="event_fee">
+							Event Fee
+						</label>
+						<input type="number" min="0" max="10000" class="form-control" name="event_fee" id="event_fee"
+							required>
+					</div>
+					<div class="form-group">
+						<label for="event_scope">
+							Event type
+						</label>
+						<select name="event_scope" id="event_scope" class="form-control" required>
+							<option value="private">private</option>
+							<option value="public" selected>public</option>
+						</select>
+					</div>
+					<div class="form-group" id="req">
+						<label>
+							Add Requirements
+						</label>
+						<input type='hidden' class='form-control' id='requ[]' name='requ[]' value="0000000000">
+						<input type='hidden' class='form-control' id='requ[]' name='requ[]' value="0000000000">
+						<button onclick="addreq()">+</button>
+						<br>
+					</div>
+					<div class="form-group" id="contact">
+						<label>
+							Add Contacts
+						</label>
+						<button onclick="return addcon()">+</button>
+						<br>
+						<label for='con[]'>Enter contact 1</label>
+
+						<input type='hidden' class='form-control' id='con[]' name='con[]' value="0000000000">
+						<input type='hidden' class='form-control' id='con[]' name='con[]' value="0000000000">
+						<input type='text' class='form-control' id='con[]' name='con[]' pattern='[0-9]{10}'>
+
+						<br>
+					</div>
+					<div class="form-group">
+						<label for="exampleInputFile">
+							upload a brochure(if any)
+						</label>
+						<input type="file" class="form-control-file" id="exampleInputFile">
+					</div>
+					<button type="submit" class="btn btn-primary">
+						Submit
+					</button>
+				</form>
+			</div>
 		</div>
 	</div>
-</div>
 
-    <script src="../public/js/jquery.min.js"></script>
-    <script src="../public/js/bootstrap.min.js"></script>
-    <script src="../public/js/scripts.js"></script>
-  </body>
+	<script src="../public/js/jquery.min.js"></script>
+	<script src="../public/js/bootstrap.min.js"></script>
+	<script src="../public/js/scripts.js"></script>
+
+	<script>
+		var num_req = 0;
+		function addreq() {
+			var req = document.getElementById('req');
+			req.innerHTML += `<label for='req[]'>Enter requirement ${++num_req}</label>`;
+			req.innerHTML += `<input type='text' class='form-control' id='requ[]' name='requ[]'>`
+		}
+		var num_con = 1;
+		function addcon() {
+			if (num_con > 3) {
+				alert("Maximum of 4 contacts allowed");
+				return false;
+			}
+			var req = document.getElementById('contact');
+			req.innerHTML += `<label for='con[]'>Enter contact ${++num_con}</label>`;
+			req.innerHTML += `<input type='text' class='form-control' id='con[]' name='con[]' pattern='[0-9]{10}'>`
+		}
+	</script>
+</body>
+
 </html>

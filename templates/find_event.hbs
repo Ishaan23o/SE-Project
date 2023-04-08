@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta content="width=device-width, initial-scale=1" name="viewport">
+    <title>Document</title>
+    <link rel="stylesheet" href="../public/show_event.css">
+</head>
+<style>
+    ::-webkit-scrollbar {
+        width: 20px;
+    }
+
+    ::-webkit-scrollbar-track {
+        background-color: transparent;
+    }
+
+    ::-webkit-scrollbar-thumb {
+        background-color: #d6dee1;
+        border-radius: 20px;
+        border: 6px solid transparent;
+        background-clip: content-box;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+        background-color: #a8bbbf;
+    }
+
+    @mixin flexbox {
+        display: -webkit-box;
+        display: -webkit-flex;
+        display: -moz-flex;
+        display: -ms-flexbox;
+        display: flex;
+    }
+
+    @mixin inline-flex {
+        display: -webkit-inline-box;
+        display: -webkit-inline-flex;
+        display: -moz-inline-flex;
+        display: -ms-inline-flexbox;
+        display: inline-flex;
+    }
+
+    @mixin flex-direction($value: row) {
+        @if $value==row-reverse {
+            -webkit-box-direction: reverse;
+            -webkit-box-orient: horizontal;
+        }
+
+        @else if $value==column {
+            -webkit-box-direction: normal;
+            -webkit-box-orient: vertical;
+        }
+
+        @else if $value==column-reverse {
+            -webkit-box-direction: reverse;
+            -webkit-box-orient: vertical;
+        }
+
+        @else {
+            -webkit-box-direction: normal;
+            -webkit-box-orient: horizontal;
+        }
+
+        -webkit-flex-direction: $value;
+        -moz-flex-direction: $value;
+        -ms-flex-direction: $value;
+        flex-direction: $value;
+    }
+
+    @mixin flex-wrap($value: nowrap) {
+        // No Webkit Box fallback.
+        -webkit-flex-wrap: $value;
+        -moz-flex-wrap: $value;
+
+        @if $value==nowrap {
+            -ms-flex-wrap: none;
+        }
+
+        @else {
+            -ms-flex-wrap: $value;
+        }
+
+        flex-wrap: $value;
+    }
+
+    @mixin flex-flow($values: (row nowrap)) {
+        // No Webkit Box fallback.
+        -webkit-flex-flow: $values;
+        -moz-flex-flow: $values;
+        -ms-flex-flow: $values;
+        flex-flow: $values;
+    }
+
+    @mixin order($int: 0) {
+        -webkit-box-ordinal-group: $int + 1;
+        -webkit-order: $int;
+        -moz-order: $int;
+        -ms-flex-order: $int;
+        order: $int;
+    }
+
+    @mixin flex-grow($int: 0) {
+        -webkit-box-flex: $int;
+        -webkit-flex-grow: $int;
+        -moz-flex-grow: $int;
+        -ms-flex-positive: $int;
+        flex-grow: $int;
+    }
+
+    @mixin flex-shrink($int: 1) {
+        -webkit-flex-shrink: $int;
+        -moz-flex-shrink: $int;
+        -ms-flex-negative: $int;
+        flex-shrink: $int;
+    }
+
+    @mixin flex-basis($value: auto) {
+        -webkit-flex-basis: $value;
+        -moz-flex-basis: $value;
+        -ms-flex-preferred-size: $value;
+        flex-basis: $value;
+    }
+
+    @mixin flex($fg: 1, $fs: null, $fb: null) {
+
+        // Set a variable to be used by box-flex properties
+        $fg-boxflex: $fg;
+
+        // Box-Flex only supports a flex-grow value so let's grab the
+        // first item in the list and just return that.
+        @if type-of($fg)=='list' {
+            $fg-boxflex: nth($fg, 1);
+        }
+
+        -webkit-box-flex: $fg-boxflex;
+        -webkit-flex: $fg $fs $fb;
+        -moz-box-flex: $fg-boxflex;
+        -moz-flex: $fg $fs $fb;
+        -ms-flex: $fg $fs $fb;
+        flex: $fg $fs $fb;
+    }
+
+    @mixin justify-content($value: flex-start) {
+        @if $value==flex-start {
+            -webkit-box-pack: start;
+            -ms-flex-pack: start;
+        }
+
+        @else if $value==flex-end {
+            -webkit-box-pack: end;
+            -ms-flex-pack: end;
+        }
+
+        @else if $value==space-between {
+            -webkit-box-pack: justify;
+            -ms-flex-pack: justify;
+        }
+
+        @else if $value==space-around {
+            -ms-flex-pack: distribute;
+        }
+
+        @else {
+            -webkit-box-pack: $value;
+            -ms-flex-pack: $value;
+        }
+
+        -webkit-justify-content: $value;
+        -moz-justify-content: $value;
+        justify-content: $value;
+    }
+
+    @mixin align-items($value: stretch) {
+        @if $value==flex-start {
+            -webkit-box-align: start;
+            -ms-flex-align: start;
+        }
+
+        @else if $value==flex-end {
+            -webkit-box-align: end;
+            -ms-flex-align: end;
+        }
+
+        @else {
+            -webkit-box-align: $value;
+            -ms-flex-align: $value;
+        }
+
+        -webkit-align-items: $value;
+        -moz-align-items: $value;
+        align-items: $value;
+    }
+
+    @mixin align-self($value: auto) {
+        // No Webkit Box Fallback.
+        -webkit-align-self: $value;
+        -moz-align-self: $value;
+
+        @if $value==flex-start {
+            -ms-flex-item-align: start;
+        }
+
+        @else if $value==flex-end {
+            -ms-flex-item-align: end;
+        }
+
+        @else {
+            -ms-flex-item-align: $value;
+        }
+
+        align-self: $value;
+    }
+
+    @mixin align-content($value: stretch) {
+        // No Webkit Box Fallback.
+        -webkit-align-content: $value;
+        -moz-align-content: $value;
+
+        @if $value==flex-start {
+            -ms-flex-line-pack: start;
+        }
+
+        @else if $value==flex-end {
+            -ms-flex-line-pack: end;
+        }
+
+        @else {
+            -ms-flex-line-pack: $value;
+        }
+
+        align-content: $value;
+    }
+
+
+
+    /*------------------------------*\
+            ¡VARIABLES
+\*------------------------------*/
+    $base-spacing-unit: 10px;
+    $tablet-lg: 991px;
+    $tablet: 767px;
+    $phone-lg: 649px;
+    $phone: 540px;
+    $desktop: 1024px;
+    $squeeze: 1024px;
+
+
+
+    /*------------------------------*\
+              ¡CARDS
+\*------------------------------*/
+
+    .container {
+        background: #ecf0f1;
+        margin: 0;
+        box-sizing: border-box;
+        margin: 0 auto;
+        width: 100%;
+    }
+
+    .card-list {
+        @include flexbox();
+        @include flex-wrap(wrap);
+        @include justify-content(flex-start);
+        max-width: 100%;
+    }
+
+    .card-list-item {
+        @include flexbox();
+        @include flex-grow(0);
+        padding: 0 0.5em;
+        list-style: none;
+        transition: width .4s ease-in-out, flex .4s ease-in-out;
+        width: 25%;
+
+        @media screen and (max-width: $desktop) {
+            width: 33.33%;
+        }
+
+        @media screen and (max-width: $tablet) {
+            width: 50%;
+        }
+
+        @media screen and (max-width: $phone-lg) {
+            padding-left: 0;
+            width: 100%;
+        }
+    }
+
+    .card {
+        @include flexbox();
+        @include flex-direction(column);
+        background: #fff;
+        border-radius: 2px;
+        padding: 1em;
+        margin-bottom: 1em;
+        width: 100%;
+
+        img {
+            display: block;
+            height: auto;
+            margin: 0 auto;
+            max-width: 100%;
+            width: 100%;
+        }
+
+        &-content {
+            @include flexbox();
+            @include flex-direction(column);
+            @include flex(1 0 auto);
+
+            .card-heading {
+                color: #696969;
+                font-size: 1.25rem;
+                margin: 1em 0;
+                font-weight: 300;
+                letter-spacing: 1px;
+                text-transform: uppercase;
+            }
+
+            p {
+                @include flex(1 0 auto);
+                font-size: 0.875rem;
+                line-height: 1.5;
+                margin: 0 0 1em;
+            }
+        }
+    }
+
+
+
+    /*------------------------------*\
+             ¡BUTTONS
+\*------------------------------*/
+
+    .btn {
+        border: solid .125em;
+        color: #fff;
+        cursor: pointer;
+        font-weight: 600;
+        padding: .625em 1em;
+        text-transform: uppercase;
+
+        &.btn-lg {
+            font-size: 1.5rem;
+        }
+
+        &.btn-md {
+            font-size: 1.25rem;
+        }
+
+        &.btn-sm {
+            font-size: 1rem;
+        }
+
+        &.primary {
+            background: #34495e;
+            border-color: #34495e;
+
+            &.hollow {
+                background: transparent;
+                color: #34495e;
+            }
+        }
+    }
+
+
+
+    /*------------------------------*\
+            ¡HELPERS
+\*------------------------------*/
+
+    .squeeze {
+        position: relative;
+        margin: 0 auto;
+        padding: 0 20px;
+        max-width: $squeeze;
+
+        @media screen and (max-width: $phone-lg) {
+            padding: 0 10px;
+        }
+    }
+
+    .push--top {
+        margin-top: 20px
+    }
+
+
+    /*------------------------------*\
+              ¡HEADER
+\*------------------------------*/
+
+    header {
+        @include flexbox();
+        @include align-items(stretch);
+        background: steelblue;
+        height: 50px;
+    }
+
+    .logo-container {
+        @include flexbox();
+        @include flex-grow(1);
+        @include align-items(center);
+        padding: 0 0 0 10px;
+    }
+
+    .title {
+        color: #fff;
+        font-weight: 400;
+
+        @media screen and (max-width: $tablet) {
+            font-size: 22px;
+        }
+
+        @media screen and (max-width: $phone-lg) {
+            font-size: 16px;
+        }
+    }
+
+    .nav-container {
+        @include flexbox();
+        @include align-items(center);
+        @include flex-direction(row-reverse);
+        @include flex-grow(4);
+    }
+
+    .link {
+        margin: 0 25px;
+
+        a {
+            color: #fff;
+            text-decoration: none;
+        }
+    }
+</style>
+
+
+<body>
+
+
+    <div id="container" style="position:fixed;width:100%;height:100%;top:0;border-radius:15%;">
+        <div class="table-wrapper" style="padding: 0px;margin: 0px;float:left; width:25%;overflow:scroll;height:100%">
+            <table class="fl-table" style=";width:95%;">
+                <thead>
+                    <tr>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody style="width:95%;">
+                    {{#data}}
+                    <tr style="width:inherit;">
+                        <td>
+                            <div class="card">
+                                <div class="card-image">
+                                    <img src="http://placehold.it/350x150" alt="placeholder" />
+                                </div>
+                                <div class="card-content">
+                                    <h3 class="card-heading">Header</h3>
+                                    <p>Here's some content</p>
+                                    <button class="btn btn-sm primary">VIEW DETAILS</button>
+                                </div>
+                            </div>
+                            {{event_name}}
+                        </td>
+                    </tr>
+                    {{/data}}
+                </tbody>
+            </table>
+        </div>
+        <div id="right" style="float:right; width:65%;max-height:400px;"> This is right panel </div>
+    </div>
+</body>
+
+</html>
