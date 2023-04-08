@@ -10,6 +10,8 @@ app.set("view engine", "hbs")
 app.set("views", templates_path)
 app.use(express.urlencoded({ extended: false }))
 app.use("/public", express.static("public"))
+num_req = 1;
+num_con = 1;
 app.get("/", (req, res) => {
   res.render("login")
 })

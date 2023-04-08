@@ -1,22 +1,16 @@
 const event_collection = require("../models/events.model")
 async function create_event(req, res) {
   let cur_status = ""
+  let reg_Date=new Date(req.body.registration_date)
+  let dates=new Date();
+  if(dates>reg_Date)
+  reg_Date=req.body.event_date
   const date = {
     event_date: req.body.event_date,
-    registration: req.body.registration_date
+    registration: reg_Date
   };
-  let contact = {};
-  let requirements = {};
-  if (req.body['requ[]'] != null) {
-    for (i = 2; i < req.body['requ[]'].length; i++) {
-      requirements[i] = req.body['requ[]'][i];
-    }
-  }
-  if (req.body['con[]'] != null) {
-    for (i = 2; i < req.body['con[]'].length; i++) {
-      contact[i] = req.body['con[]'][i];
-    }
-  }
+  let contact = req.body.con_control;
+  let requirements = req.body.req_control;
   let scope = {
     scope: req.body.event_scope,
     code: "PUBLIC"

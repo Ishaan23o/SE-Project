@@ -83,23 +83,14 @@
 						<label>
 							Add Requirements
 						</label>
-						<input type='hidden' class='form-control' id='requ[]' name='requ[]' value="0000000000">
-						<input type='hidden' class='form-control' id='requ[]' name='requ[]' value="0000000000">
-						<button onclick="addreq()">+</button>
+						<button type="button" id="req_add" >+</button>
 						<br>
 					</div>
 					<div class="form-group" id="contact">
 						<label>
 							Add Contacts
 						</label>
-						<button onclick="return addcon()">+</button>
-						<br>
-						<label for='con[]'>Enter contact 1</label>
-
-						<input type='hidden' class='form-control' id='con[]' name='con[]' value="0000000000">
-						<input type='hidden' class='form-control' id='con[]' name='con[]' value="0000000000">
-						<input type='text' class='form-control' id='con[]' name='con[]' pattern='[0-9]{10}'>
-
+						<button type="button" id="con_add" >+</button>
 						<br>
 					</div>
 					<div class="form-group">
@@ -118,25 +109,89 @@
 
 	<script src="../public/js/jquery.min.js"></script>
 	<script src="../public/js/bootstrap.min.js"></script>
-	<script src="../public/js/scripts.js"></script>
+	<script src="../public/js/scripts.js"></script>;
 
 	<script>
-		var num_req = 0;
-		function addreq() {
-			var req = document.getElementById('req');
-			req.innerHTML += `<label for='req[]'>Enter requirement ${++num_req}</label>`;
-			req.innerHTML += `<input type='text' class='form-control' id='requ[]' name='requ[]'>`
-		}
-		var num_con = 1;
-		function addcon() {
-			if (num_con > 3) {
-				alert("Maximum of 4 contacts allowed");
+	
+		let num_req=1;
+		let con_req=1;
+		document.getElementById("req_add").addEventListener("click",()=>{
+			
+			
+			if (num_req > 10) {
+				alert("Maximum of 10 descriptions allowed");
 				return false;
 			}
-			var req = document.getElementById('contact');
-			req.innerHTML += `<label for='con[]'>Enter contact ${++num_con}</label>`;
-			req.innerHTML += `<input type='text' class='form-control' id='con[]' name='con[]' pattern='[0-9]{10}'>`
-		}
+			let req = document.getElementById('req');
+			let isadd=1;
+			if(num_req>1)
+			{
+				for(let i=1;i<num_req;i++)
+				{
+				let check=document.getElementById(`req-${i}`).value;
+				if(!check)
+				{
+					alert("requirements cant be empty")
+					isadd=0;
+					break;
+				}
+				}
+			}
+			if(isadd===1)
+			{
+				
+				const labelnode=document.createElement("label")
+				labelnode.setAttribute("for",`req-${num_req}`)
+				const textnode=document.createTextNode(`Enter requirement ${num_req}`)
+				labelnode.append(textnode)
+				req.append(labelnode)
+			const inputnode=document.createElement("input")
+			inputnode.setAttribute("type","text")
+			inputnode.setAttribute("class","form-control")
+			inputnode.setAttribute("id",`req-${num_req}`)
+			inputnode.setAttribute("name","req_control")
+			
+			req.append(inputnode);
+			num_req++;
+			}
+		})
+		 
+
+		document.getElementById("con_add").addEventListener("click",()=>{
+			
+		
+				if (con_req > 4) {
+					alert("Maximum of 4 contacts allowed");
+					return false;
+				}
+				for(let i=1;i<con_req;i++)
+				{
+					let check=document.getElementById(`con-${i}`).value;
+				if(!check)
+				{
+					alert("contact cant be empty")
+					return false;
+				}
+				}
+				var req = document.getElementById('contact');
+				const labelnode=document.createElement("label")
+				labelnode.setAttribute("for",`con-${con_req}`)
+				const textnode=document.createTextNode(`Enter contact ${con_req}`)
+				labelnode.append(textnode)
+				req.append(labelnode)
+			    const inputnode=document.createElement("input")
+			inputnode.setAttribute("type","text")
+			inputnode.setAttribute("class","form-control")
+			inputnode.setAttribute("id",`con-${con_req}`)
+			inputnode.setAttribute("name","con_control")
+			inputnode.setAttribute("pattern",'[0-9]{10}')
+			req.append(inputnode);
+				con_req++;
+			
+			
+		})
+		 
+	
 	</script>
 </body>
 
