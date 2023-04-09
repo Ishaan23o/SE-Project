@@ -37,12 +37,19 @@
                     <td>{{type}}</td>
                     <td>{{status}}</td>
                     <td>{{scope.scope}}</td>
+                    <td><button type="button" value={{scope.code}} class="code_class" id=code-{{@index}} onclick="fun({{@index}})" >click here </button></td>
                 </tr>
                 {{/data}}
             </tbody>
         </table>
     </div>
-
+<script defer>
+   function fun(a)
+   {
+    let str=document.getElementById(`code-${a}`).value
+    alert(`code is ${str}`)
+   }
+</script>
 
 </body>
 
