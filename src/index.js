@@ -2,6 +2,7 @@ const express = require("express")
 const app = express()
 const path = require("path")
 const hbs = require("hbs")
+const moment = require('moment')
 const event_controllers = require("../controllers/events.controller")
 const login_controllers = require("../controllers/login.controller")
 const templates_path = path.join(__dirname, '../templates')
@@ -27,3 +28,13 @@ app.post("/login", login_controllers.login)
 app.listen(3000, () => {
   console.log("port connected");
 })
+
+
+hbs.handlebars.registerHelper('formatTime', function (date, format) {
+  var mmnt = moment(date);
+  return mmnt.format(format);
+});
+
+hbs.handlebars.registerHelper('array', function (elem) {
+  return Array.isArray(elem);
+});

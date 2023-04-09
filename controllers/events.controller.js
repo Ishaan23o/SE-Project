@@ -1,10 +1,10 @@
 const event_collection = require("../models/events.model")
 async function create_event(req, res) {
   let cur_status = ""
-  let reg_Date=new Date(req.body.registration_date)
-  let dates=new Date();
-  if(dates>reg_Date)
-  reg_Date=req.body.event_date
+  let reg_Date = new Date(req.body.registration_date)
+  let dates = new Date();
+  if (dates > reg_Date)
+    reg_Date = req.body.event_date
   const date = {
     event_date: req.body.event_date,
     registration: reg_Date
@@ -27,15 +27,13 @@ async function create_event(req, res) {
     requirements: requirements,
     scope: scope
   }
-  if (data.scope != "PUBLIC") {
-    var id = require("crypto").randomBytes(64).toString('hex');
-    let find_code = await event_collection.find({ "scope.code": id }).count();
-    while (find_code > 0) {
-      id = require("crypto").randomBytes(64).toString('hex');
-      find_code = await event_collection.find({ "scope.code": id }).count();
-    }
-    data.scope.code = id;
+  var id = require("crypto").randomBytes(64).toString('hex');
+  let find_code = await event_collection.find({ "scope.code": id }).count();
+  while (find_code > 0) {
+    id = require("crypto").randomBytes(64).toString('hex');
+    find_code = await event_collection.find({ "scope.code": id }).count();
   }
+  data.scope.code = id;
 
   await event_collection.insertMany([data])
 
@@ -75,7 +73,9 @@ async function find_event(req, res) {
     else
       element.status = "today"
   }
-  res.render("find_event", { data: find_elem })
+  let cur_elem = await event_collection.find({ 'scope.code': req.query.ID });
+  console.log(cur_elem);
+  res.render("find_event", { data: find_elem, event_data: cur_elem });
 };
 module.exports = {
   create_event,

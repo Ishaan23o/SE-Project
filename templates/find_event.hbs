@@ -7,6 +7,7 @@
     <meta content="width=device-width, initial-scale=1" name="viewport">
     <title>Document</title>
     <link rel="stylesheet" href="../public/show_event.css">
+
 </head>
 <style>
     ::-webkit-scrollbar {
@@ -436,14 +437,53 @@
             text-decoration: none;
         }
     }
+
+    /* Add a black background color to the top navigation bar */
+    .topnav {
+        overflow: hidden;
+        background-color: #e9e9e9;
+    }
+
+    /* Style the links inside the navigation bar */
+    .topnav a {
+        float: left;
+        display: block;
+        color: black;
+        text-align: center;
+        text-decoration: none;
+        font-size: 17px;
+    }
+
+    /* Change the color of links on hover */
+    .topnav a:hover {
+        background-color: #ddd;
+        color: black;
+    }
+
+    /* Style the "active" element to highlight the current page */
+    .topnav a.active {
+        background-color: #2196F3;
+        color: white;
+    }
+
+    /* Style the search box inside the navigation bar */
+    .topnav input[type=text] {
+        float: right;
+        border: none;
+        font-size: 17px;
+    }
 </style>
 
 
 <body>
 
 
-    <div id="container" style="position:fixed;width:100%;height:100%;top:0;border-radius:15%;">
-        <div class="table-wrapper" style="padding: 0px;margin: 0px;float:left; width:25%;overflow:scroll;height:100%">
+    <div id="container" style="position:absolute;width:100%;height:100%;top:0;">
+        <div class="table-wrapper"
+            style="margin:0;float:left; width:25%;overflow:scroll;height:100%;left:0;border-radius:5%">
+            <div class="topnav" style='width: 100%;padding-top: 10px;'>
+                <input type="text" placeholder="Search.." style='width: inherit;align-self: center'>
+            </div>
             <table class="fl-table" style=";width:95%;">
                 <thead>
                     <tr>
@@ -455,13 +495,17 @@
                     <tr style="width:inherit;">
                         <td>
                             <div class="card">
-                                <div class="card-image">
-                                    <img src="http://placehold.it/350x150" alt="placeholder" />
+                                <div class="card-image" style="width:inherit;">
+                                    <img src="http://placehold.it/350x150" style="width:inherit;" alt="placeholder" />
                                 </div>
-                                <div class="card-content">
+                                <div class="card-content" style="width:inherit;">
                                     <h3 class="card-heading">Header</h3>
                                     <p>Here's some content</p>
-                                    <button class="btn btn-sm primary">VIEW DETAILS</button>
+                                    <form action="/find_event" method="get">
+                                        <input type='hidden' name='ID' value='{{scope.code}}'>
+                                        <button class="btn btn-sm primary" type="submit" name='button'>VIEW
+                                            DETAILS</button>
+                                    </form>
                                 </div>
                             </div>
                             {{event_name}}
@@ -471,7 +515,48 @@
                 </tbody>
             </table>
         </div>
-        <div id="right" style="float:right; width:65%;max-height:400px;"> This is right panel </div>
+        <div id="right" style="float:right; width:75%;max-height:400px;display: block;">
+            <h1 id='no_event'>NO EVENT SELECTED YET</h1>
+            {{#event_data}}
+            <div style='width:100%;background-color: #d6dee1; position:relative;display: flexbox;'>
+                <img src="http://placehold.it/75x75" style="width:auto;height:auto;display: inline-block;"
+                    alt="placeholder" />
+                <div
+                    style="margin:0;padding:0%;background-color: #d6dee1 ;position:relative;top:0;display: inline-block;">
+                    <h1>
+                        {{event_name}}
+                    </h1>
+                </div>
+            </div>
+            <div style="margin:0;width:100%;background-color: #d6dee1 ;position:relative;margin-top: 1px;">
+                <div>Registration deadline: {{formatTime date.registration "MM-DD-YYYY"}}</div>
+                <div>Event Date:{{formatTime date.event_date "MM-DD-YYYY"}}</div>
+                <div>Timing: {{time}}</div>
+                <div>Fee: {{fee}}</div>
+                <div>Contact :
+                    {{#if (array contact)}}
+                    {{#each contact}}
+                    <div>{{this}}</div>
+                    {{/each}}
+                    {{else}}
+                    <div>{{contact}}</div>
+                    {{/if}}
+
+                </div>
+            </div>
+            <div style="margin:0;width:100%;background-color: #d6dee1 ;position:relative;margin-top:1px;height:100px;">
+                {{#each requirement}}
+                <div>{{this}}</div>
+                {{/each}}
+            </div>
+            <div style="margin:0;width:100%;background-color: #d6dee1 ;position:relative;margin-top:1px;height:100px;">
+                <div>{{description}}</div>
+            </div>
+            <script>
+                document.getElementById('right').removeChild(document.getElementById('no_event'));
+            </script>
+            {{/event_data}}
+        </div>
     </div>
 </body>
 
