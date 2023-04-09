@@ -48,17 +48,6 @@ async function create_event(req, res) {
   res.render("index")
 };
 
-async function register(req, res) {
-  let find_x = await registration_collection.findOne({ 'Event_ID': req.body.register });
-  find_x.registered = {};
-  delete find_x._id;
-  find_x.registered[cur_session] = true;
-  await registration_collection.updateOne({ 'Event_ID': req.body.register }, find_x, { $upsert: false }, function (err, result) {
-    if (err) return res.send(500, { error: err });
-  });
-  let find_elem = await event_collection.find();
-  res.render("find_event", { data: find_elem });
-}
 
 
 async function show_event(req, res) {
@@ -96,8 +85,35 @@ async function find_event(req, res) {
   let cur_elem = await event_collection.find({ 'scope.code': req.query.ID });
   res.render("find_event", { data: find_elem, event_data: cur_elem });
 };
+async function show_registered_event(req, res) {
+ let registered={}
+  registered[cur_session]=true;
+  let x={registered}
+  var find_elem_temp = await registration_collection.find(x);
+   let ids=find_elem_temp.map((item)=>{
+    return item.Event_ID
+   })
+
+  var find_elem=await event_collection.find({"scope.code":{$in:ids}});
+  console.log(find_elem);
+  let cur_date = new Date();
+  cur_date.setHours(0, 0, 0, 0)
+  for (var i = 0; i < find_elem.length; i++) {
+    var element = find_elem[i];
+    let req_date = new Date(element.date)
+    req_date.setHours(0, 0, 0, 0)
+    if (req_date > cur_date)
+      element.status = "upcoming"
+    else if (req_date < cur_date)
+      element.status = "expired"
+    else
+      element.status = "today"
+  }
+  res.render("show_events", { data: find_elem })
+};
 module.exports = {
   create_event,
   show_event,
-  find_event, register
+  show_registered_event,
+  find_event, 
 }

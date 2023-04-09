@@ -47,7 +47,10 @@
    function fun(a)
    {
     let str=document.getElementById(`code-${a}`).value
-    alert(`code is ${str}`)
+    navigator.clipboard.writeText(str);
+
+    document.execCommand("copy");
+    alert(`copied code`)
    }
 </script>
 

@@ -24,12 +24,12 @@ app.get("/private_registration", (req, res) => {
   res.render("private_registration")
 })
 app.get("/find_event", event_controllers.find_event)
-app.post("/register", event_controllers.register)
+app.post("/register", registrations_controllers.register)
 app.get("/show_event", event_controllers.show_event)
+app.get("/show_registered_events", event_controllers.show_registered_event)
 app.post("/signup", login_controllers.signup)
 app.post("/new_event", event_controllers.create_event)
 app.post("/login", login_controllers.login)
-app.post("/register", registrations_controllers.registers)
 app.listen(3000, () => {
   console.log("port connected");
 })
