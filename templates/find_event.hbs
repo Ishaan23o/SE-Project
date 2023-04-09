@@ -552,10 +552,21 @@
             <div style="margin:0;width:100%;background-color: #d6dee1 ;position:relative;margin-top:1px;height:100px;">
                 <div>{{description}}</div>
             </div>
+            <div style="margin:0;width:100%;background-color: #d6dee1 ;position:relative;margin-top:1px;height:100px;">
+                <form action="/register" method="post">
+                    <button style="top:20%;left:50%;position: relative;" type="submit" name='register'
+                        value='{{scope.code}}'>
+                        <div style="padding:10px;">
+                            Register
+                        </div>
+                    </button>
+                </form>
+            </div>
             <script>
                 document.getElementById('right').removeChild(document.getElementById('no_event'));
             </script>
             {{/event_data}}
+
         </div>
     </div>
 </body>

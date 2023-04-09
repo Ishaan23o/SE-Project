@@ -20,6 +20,7 @@ app.get("/new_event", (req, res) => {
   res.render("create_event")
 })
 app.get("/find_event", event_controllers.find_event)
+app.post("/register", event_controllers.register)
 app.get("/show_event", event_controllers.show_event)
 app.post("/signup", login_controllers.signup)
 app.post("/new_event", event_controllers.create_event)

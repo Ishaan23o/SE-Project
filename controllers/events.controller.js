@@ -1,4 +1,5 @@
 const event_collection = require("../models/events.model")
+const registration_collection = require("../models/registration.model")
 async function create_event(req, res) {
   let cur_status = ""
   let reg_Date = new Date(req.body.registration_date)
@@ -36,9 +37,28 @@ async function create_event(req, res) {
   data.scope.code = id;
 
   await event_collection.insertMany([data])
+  let registartion_data = {
+    Event_ID: id,
+    registered:
+    {
 
-  res.render("create_event")
+    }
+  }
+  await registration_collection.insertMany([registartion_data]);
+  res.render("index")
 };
+
+async function register(req, res) {
+  let find_x = await registration_collection.findOne({ 'Event_ID': req.body.register });
+  find_x.registered = {};
+  delete find_x._id;
+  find_x.registered[cur_session] = true;
+  await registration_collection.updateOne({ 'Event_ID': req.body.register }, find_x, { $upsert: false }, function (err, result) {
+    if (err) return res.send(500, { error: err });
+  });
+  let find_elem = await event_collection.find();
+  res.render("find_event", { data: find_elem });
+}
 
 
 async function show_event(req, res) {
@@ -59,7 +79,7 @@ async function show_event(req, res) {
   res.render("show_events", { data: find_elem })
 };
 async function find_event(req, res) {
-  let find_elem = await event_collection.find({ email: cur_session });
+  let find_elem = await event_collection.find();
   let cur_date = new Date();
   cur_date.setHours(0, 0, 0, 0)
   for (var i = 0; i < find_elem.length; i++) {
@@ -74,11 +94,10 @@ async function find_event(req, res) {
       element.status = "today"
   }
   let cur_elem = await event_collection.find({ 'scope.code': req.query.ID });
-  console.log(cur_elem);
   res.render("find_event", { data: find_elem, event_data: cur_elem });
 };
 module.exports = {
   create_event,
   show_event,
-  find_event
+  find_event, register
 }
