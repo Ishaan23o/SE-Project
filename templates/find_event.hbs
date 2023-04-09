@@ -256,7 +256,7 @@
 \*------------------------------*/
 
     .container {
-        background: #ecf0f1;
+        background: #cad4d6;
         margin: 0;
         box-sizing: border-box;
         margin: 0 auto;
@@ -295,7 +295,7 @@
     .card {
         @include flexbox();
         @include flex-direction(column);
-        background: #fff;
+        background: rgb(238, 244, 247);
         border-radius: 2px;
         padding: 1em;
         margin-bottom: 1em;
@@ -456,14 +456,14 @@
 
     /* Change the color of links on hover */
     .topnav a:hover {
-        background-color: #ddd;
+        background-color: #2196F3;
         color: black;
     }
 
     /* Style the "active" element to highlight the current page */
     .topnav a.active {
         background-color: #2196F3;
-        color: white;
+        color: #2196F3;
     }
 
     /* Style the search box inside the navigation bar */
@@ -475,16 +475,17 @@
 </style>
 
 
-<body>
+<body stye="scrollbar-width: thin;scrollbar-color: #2196F3;">
 
 
-    <div id="container" style="position:absolute;width:100%;height:100%;top:0;">
+    <div id="container"
+        style="position:absolute;width:100%;height:100%;top:0;bottom:0;right:0;overflow:hidden;background-color: #bbdbf5;border-radius: 0%;">
         <div class="table-wrapper"
-            style="margin:0;float:left; width:25%;overflow:scroll;height:100%;left:0;border-radius:5%">
+            style="margin:0;float:left; width:25%;overflow:scroll;height:100%;left:0;top:0;bottom:0;right:0;border-radius:5%">
             <div class="topnav" style='width: 100%;padding-top: 10px;'>
                 <input type="text" placeholder="Search.." style='width: inherit;align-self: center'>
             </div>
-            <table class="fl-table" style=";width:95%;">
+            <table class="fl-table" style="margin:0;width:100%;height:100%;left:0;top:0;bottom:0;right:0;">
                 <thead>
                     <tr>
                         <th></th>
@@ -496,11 +497,12 @@
                         <td>
                             <div class="card">
                                 <div class="card-image" style="width:inherit;">
-                                    <img src="http://placehold.it/350x150" style="width:inherit;" alt="placeholder" />
+                                    <img src="https://th.bing.com/th/id/OIP.kQB9XFdPTlin3KQdUaJUfQHaDt?pid=ImgDet&rs=1"
+                                        style="width:inherit;" alt="placeholder" />
                                 </div>
                                 <div class="card-content" style="width:inherit;">
-                                    <h3 class="card-heading">Header</h3>
-                                    <p>Here's some content</p>
+                                    <h3 class="card-heading">{{event_name}}</h3>
+                                    <p>{{formatTime date.event_date "MM-DD-YYYY"}}</p>
                                     <form action="/find_event" method="get">
                                         <input type='hidden' name='ID' value='{{scope.code}}'>
                                         <button class="btn btn-sm primary" type="submit" name='button'>VIEW
@@ -508,53 +510,68 @@
                                     </form>
                                 </div>
                             </div>
-                            {{event_name}}
                         </td>
                     </tr>
                     {{/data}}
                 </tbody>
             </table>
         </div>
-        <div id="right" style="float:right; width:75%;max-height:400px;display: block;">
+        <div id="right"
+            style="float:right; width:75%;max-height:100%;height:100%;display: block;overflow-y: scroll;overflow-x: hidden;">
             <h1 id='no_event'>NO EVENT SELECTED YET</h1>
             {{#event_data}}
-            <div style='width:100%;background-color: #d6dee1; position:relative;display: flexbox;'>
-                <img src="http://placehold.it/75x75" style="width:auto;height:auto;display: inline-block;"
+            <div style='width:100%;background-color: #d8e4e9; position:relative;display: flexbox;;'>
+                <img src="https://th.bing.com/th/id/OIP.kQB9XFdPTlin3KQdUaJUfQHaDt?pid=ImgDet&rs=1"
+                    style="width:180px;height:120px;display: inline-block;margin-top: 20px;margin-left: 20px;"
                     alt="placeholder" />
                 <div
-                    style="margin:0;padding:0%;background-color: #d6dee1 ;position:relative;top:0;display: inline-block;">
-                    <h1>
+                    style="background-color: #d8e4e9 ;position: absolute;top:25%;left:42%;margin:0;padding:0%;display:inline;">
+                    <h1 style="text-align: center;padding: 0%;margin: 0;">
                         {{event_name}}
                     </h1>
                 </div>
             </div>
-            <div style="margin:0;width:100%;background-color: #d6dee1 ;position:relative;margin-top: 1px;">
-                <div>Registration deadline: {{formatTime date.registration "MM-DD-YYYY"}}</div>
-                <div>Event Date:{{formatTime date.event_date "MM-DD-YYYY"}}</div>
-                <div>Timing: {{time}}</div>
-                <div>Fee: {{fee}}</div>
-                <div>Contact :
-                    {{#if (array contact)}}
-                    {{#each contact}}
-                    <div>{{this}}</div>
-                    {{/each}}
-                    {{else}}
-                    <div>{{contact}}</div>
-                    {{/if}}
-
+            <div style="margin:0;width:100%;background-color: #d8e4e9 ;position:relative;margin-top: 1px;">
+                <div
+                    style="margin-left:1%;width:100%;padding:5px;background-color: #d8e4e9 ;position:relative;margin-top: 1px;height:15%">
+                    <div style="padding:5px;margin:5px">Registration deadline: {{formatTime date.registration
+                        "MM-DD-YYYY"}}</div>
+                    <div style="padding:5px;">Event Date:{{formatTime date.event_date "MM-DD-YYYY"}}</div>
+                    <div style="padding:5px;">Timing: {{time}}</div>
+                    <div style="padding:5px;">Fee: {{fee}}</div>
+                    <div style="padding:5px;">Contact :
+                        {{#if (array contact)}}
+                        {{#each contact}}
+                        <div>{{this}}</div>
+                        {{/each}}
+                        {{else}}
+                        <div>{{contact}}</div>
+                        {{/if}}
+                    </div>
                 </div>
             </div>
-            <div style="margin:0;width:100%;background-color: #d6dee1 ;position:relative;margin-top:1px;height:100px;">
-                {{#each requirement}}
-                <div>{{this}}</div>
-                {{/each}}
+            <div style="margin:0;width:100%;background-color: #d8e4e9 ;position:relative;margin-top:1px;height:30%;">
+                <div
+                    style="margin-left:1%;width:100%;padding:5px;background-color: #d8e4e9 ;position:relative;margin-top: 1px;height:15%">
+                    <h1 style="text-align: center;padding: 0%;margin: 0;">Requirements</h1>
+                    {{#each requirements}}
+                    <div style="padding:5px;">{{this}}</div>
+                    {{/each}}
+                </div>
             </div>
-            <div style="margin:0;width:100%;background-color: #d6dee1 ;position:relative;margin-top:1px;height:100px;">
-                <div>{{description}}</div>
+            <div style="margin:0;width:100%;background-color: #d8e4e9 ;position:relative;margin-top:1px;height:30%;">
+                <h1 style="text-align: center;padding: 0%;margin: 0;">Description</h1>
+                <div style="padding:5px;">
+                    <div
+                        style="margin-left:1%;width:100%;background-color: #d8e4e9 ;position:relative;margin-top: 1px;">
+                        {{description}}
+                    </div>
+                </div>
             </div>
-            <div style="margin:0;width:100%;background-color: #d6dee1 ;position:relative;margin-top:1px;height:100px;">
-                <form action="/register" method="post">
-                    <button style="top:20%;left:50%;position: relative;" type="submit" name='register'
+            <div
+                style="margin:0;width:100%;background-color: #d8e4e9 ;position:relative;margin-top:1px;height:10%;padding: 0;">
+                <form style="height:100%;" action="/register" method="post">
+                    <button style="top:20%;left:45%;position: relative;" type="submit" name='register'
                         value='{{scope.code}}'>
                         <div style="padding:10px;">
                             Register
