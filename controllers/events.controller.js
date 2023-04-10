@@ -68,7 +68,7 @@ async function show_event(req, res) {
   res.render("show_events", { data: find_elem })
 };
 async function find_event(req, res) {
-  let find_elem = await event_collection.find();
+  let find_elem = await event_collection.find({"scope.scope":"public"});
   let cur_date = new Date();
   cur_date.setHours(0, 0, 0, 0)
   for (var i = 0; i < find_elem.length; i++) {

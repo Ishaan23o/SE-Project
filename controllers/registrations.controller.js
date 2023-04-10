@@ -9,7 +9,7 @@ async function register(req, res) {
     await registration_collection.updateOne({ 'Event_ID': req.body.register }, find_x, { $upsert: false }, function (err, result) {
       if (err) return res.send(500, { error: err });
     });
-    let find_elem = await event_collection.find();
+    let find_elem = await event_collection.find({"scope.scope":"public"});
     res.render("find_event", { data: find_elem });}
     catch{
       res.send("wrong code");
