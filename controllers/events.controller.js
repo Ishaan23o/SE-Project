@@ -83,6 +83,16 @@ async function find_event(req, res) {
       element.status = "today"
   }
   let cur_elem = await event_collection.find({ 'scope.code': req.query.ID });
+  var registered={};
+  registered[cur_session]=true;
+  var Event_ID=req.query.ID
+  var temp1={
+  Event_ID:Event_ID,
+  registered:registered
+};
+  let reg=await registration_collection.find(temp1).count();
+  if(reg)cur_elem[0].registered=true;
+  console.log(cur_elem)
   res.render("find_event", { data: find_elem, event_data: cur_elem });
 };
 async function show_registered_event(req, res) {
@@ -110,6 +120,7 @@ async function show_registered_event(req, res) {
       element.status = "today"
   }
   res.render("show_events", { data: find_elem })
+
 };
 module.exports = {
   create_event,
