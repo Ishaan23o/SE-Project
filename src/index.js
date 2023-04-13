@@ -28,6 +28,9 @@ app.post("/register", registrations_controllers.register)
 app.get("/show_event", event_controllers.show_event)
 app.get("/show_registered_events", event_controllers.show_registered_event)
 app.post("/signup", login_controllers.signup)
+app.post("/edit_event", registrations_controllers.edit_event)
+app.post("/edited_event", registrations_controllers.edited_event)
+app.post("/delete_event", registrations_controllers.delete_event)
 app.post("/new_event", event_controllers.create_event)
 app.post("/login", login_controllers.login)
 app.listen(3000, () => {
@@ -42,4 +45,8 @@ hbs.handlebars.registerHelper('formatTime', function (date, format) {
 
 hbs.handlebars.registerHelper('array', function (elem) {
   return Array.isArray(elem);
+});
+
+hbs.handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
+  return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
 });

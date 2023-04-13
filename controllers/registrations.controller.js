@@ -1,12 +1,50 @@
 const event_collection = require("../models/events.model")
 const registration_collection = require("../models/registration.model")
 const nodemailer = require("nodemailer");
-const mailgen=require("mailgen");
+const mailgen = require("mailgen");
+
+async function edit_event(req, res) {
+  let elem = await event_collection.findOne({ 'scope.code': req.body.Edit });
+  res.render('edit_event', { data: elem });
+}
+
+async function delete_event(req, res) {
+  await event_collection.findOneAndDelete({ 'scope.code': req.body.Edit });
+  await registration_collection.findOneAndDelete({ Event_ID: req.body.Edit });
+  res.render('index')
+}
+
+async function edited_event(req, res) {
+  let reg_Date = new Date(req.body.registration_date)
+  let dates = new Date();
+  if (dates > reg_Date)
+    reg_Date = req.body.event_date
+  const date = {
+    event_date: req.body.event_date,
+    registration: reg_Date
+  };
+  let contact = req.body.con_control;
+  let requirements = req.body.req_control;
+  let data = {
+    event_name: req.body.event_name,
+    date: date,
+    time: req.body.event_time,
+    type: req.body.event_type,
+    description: req.body.event_desc,
+    fees: req.body.event_fee,
+    contact: contact,
+    requirements: requirements,
+    'scope.scope': req.body.event_scope
+  }
+  let elem = await event_collection.findOneAndUpdate({ 'scope.code': req.body.code }, { $set: data });
+  res.render('index');
+}
+
+
 async function register(req, res) {
-  try{
-    let find_x = await registration_collection.findOne({ 'Event_ID': req.body.register });
+  try {
+    let find_x = {};
     find_x.registered = {};
-    delete find_x._id;
     find_x.registered[cur_session] = true;
     await registration_collection.updateOne({ 'Event_ID': req.body.register }, find_x, { $upsert: false }, function (err, result) {
       if (err) return res.send(500, { error: err });
@@ -38,13 +76,15 @@ async function register(req, res) {
     //   html:mail
     // }
     // transporter.sendMail(message);
-    let find_elem = await event_collection.find({"scope.scope":"public"});
-    res.render("find_event", { data: find_elem });}
-    catch{
-      res.send("wrong code");
-    }
-  };
-  module.exports = {
-    register,
-    
+    let find_elem = await event_collection.find({ "scope.scope": "public" });
+    res.render("find_event", { data: find_elem });
   }
+  catch {
+    res.send("wrong code");
+  }
+};
+module.exports = {
+  register,
+  edit_event,
+  edited_event, delete_event
+}

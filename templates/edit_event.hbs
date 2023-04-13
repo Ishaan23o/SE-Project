@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+    <title>create_event</title>
+
+    <meta name="description" content="Source code generated using layoutit.com">
+    <meta name="author" content="LayoutIt!">
+
+    <link href="../public/event_css/bootstrap.min.css" rel="stylesheet">
+    <link href="../public/event_css/style.css" rel="stylesheet">
+
+</head>
+
+<body>
+    <script>
+        let num_req = 1;
+        let con_req = 1;
+    </script>
+
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-md-12">
+                <form action="/edited_event" method="post">
+                    <input type='hidden' value={{data.scope.code}} name='code'>
+                    <div class="form-group">
+                        <label for="event_name">
+                            Event name
+                        </label>
+                        <input class="form-control" name="event_name" id="event_name" required
+                            value='{{data.event_name}}'>
+                    </div>
+                    <div class="form-group">
+                        <label for="event_date">
+                            Event date
+                        </label>
+                        <input type="date" class="form-control" name="event_date" id="event_date" min="" required
+                            value='{{#formatTime data.date.event_date "YYYY-MM-DD"}}{{/formatTime}}'>
+                    </div>
+                    <div class="form-group">
+                        <label for="registration_date">
+                            Registration deadline (Optional)
+                        </label>
+                        <input type="date" class="form-control" name="registration_date" id="registration_date"
+                            value='{{#formatTime data.date.registration_date "YYYY-MM-DD"}}{{/formatTime}}'>
+                    </div>
+                    <div class="form-group">
+                        <label for="event_time">
+                            Event Time
+                        </label>
+                        <input type="time" class="form-control" name="event_time" id="event_time" required
+                            value="{{data.time}}">
+                    </div>
+                    <div class="form-group">
+                        <label for="event_type">
+                            Event type
+                        </label>
+                        <select name="event_type" id="event_type" class="form-control" required>
+                            <option value="online" {{#ifEquals data.type 'online' }}selected{{/ifEquals}}>online
+                            </option>
+                            <option value="offline" {{#ifEquals data.type 'offline' }}selected{{/ifEquals}}>offline
+                            </option>
+                            <option value="hybrid" {{#ifEquals data.type 'hybrid' }}selected{{/ifEquals}}>hybrid
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label for="event_desc">
+                            Event description
+                        </label>
+                        <textarea class="form-control" name="event_desc" id="event_desc"
+                            required>{{data.description}}</textarea>
+                    </div>
+                    <div class="form-group">
+                        <label for="event_fee">
+                            Event Fee
+                        </label>
+                        <input type="number" min="0" max="10000" class="form-control" name="event_fee" id="event_fee"
+                            value='{{data.fees}}' required>
+                    </div>
+                    <div class="form-group">
+                        <label for="event_scope">
+                            Event type
+                        </label>
+                        <select name="event_scope" id="event_scope" class="form-control" required>
+                            <option value="private" {{#ifEquals data.scope.scope 'private' }}selected{{/ifEquals}}>
+                                private</option>
+                            <option value="public" {{#ifEquals data.scope.scope 'public' }}selected{{/ifEquals}}>public
+                            </option>
+                        </select>
+                    </div>
+                    <div class="form-group" id="req">
+                        <label>
+                            Add Requirements
+                        </label>
+                        <button type="button" id="req_add">+</button>
+                        <br>
+                    </div>
+                    <script>
+                        //Relabel after deletion
+                        document.getElementById("req_add").addEventListener("click", () => {
+                            if (num_req > 10) {
+                                alert("Maximum of 10 descriptions allowed");
+                                return false;
+                            }
+                            let req = document.getElementById('req');
+                            let isadd = 1;
+                            if (num_req > 1) {
+                                for (let i = 1; i < num_req; i++) {
+                                    let check = document.getElementById(`req-${i}`).value;
+                                    if (!check) { alert("requirements cant be empty"); isadd = 0; break; }
+                                }
+                            } if (isadd === 1) {
+                                //Label for every requirement
+                                const labelnode = document.createElement("label");
+                                labelnode.setAttribute('class', 'req_label');
+                                labelnode.setAttribute("for", `req-${num_req}`);
+                                labelnode.setAttribute("id", `label_req-${num_req}`);
+
+                                //Inner text
+                                const textnode = document.createTextNode(`Enter requirement ${num_req}`);
+                                labelnode.append(textnode);
+                                req.append(labelnode);
+
+                                //Input tag
+                                const inputnode = document.createElement("input"); inputnode.setAttribute("type", "text");
+                                inputnode.setAttribute("class", "form-control");
+                                inputnode.setAttribute("id", `req-${num_req}`); inputnode.setAttribute("name", "req_control");
+                                req.append(inputnode);
+
+                                //Delete Button
+                                const delbutton = document.createElement('button');
+                                delbutton.setAttribute('id', `del_req-${num_req}`);
+                                delbutton.setAttribute('class', 'btn btn-primary');
+                                delbutton.setAttribute('type', 'button');
+                                delbutton.textContent = 'delete requirement';
+                                delbutton.addEventListener('click', () => {
+                                    var id = delbutton.id.substr(8);
+                                    req.removeChild(document.getElementById('label_req-' + id));
+                                    req.removeChild(document.getElementById('req-' + id));
+                                    req.removeChild(document.getElementById('del_req-' + id));
+                                    req.removeChild(document.getElementById('br_req-' + id));
+
+                                    //Change labels now that one less requirement is there
+                                    var labels = document.getElementsByClassName("req_label");
+                                    for (var k = 0; k < labels.length; k++) {
+                                        labels[k].textContent = `Enter requirement ${k + 1}`;
+                                    }
+                                    num_req--;
+                                })
+                                req.append(delbutton);
+
+                                //Br tag for every requirement
+                                const br = document.createElement('br');
+                                br.setAttribute('id', `br_req-${num_req}`);
+                                req.append(br);
+                                num_req++;
+                            }
+                        })
+
+                        //Helper function for generating all requirements already defined
+                        function gen_req_button(text) {
+                            document.getElementById("req_add").click();
+                            document.getElementById(`req-${num_req - 1}`).value = text;
+                        }
+                    </script>
+                    {{#data.requirements}}
+                    <script>
+                        gen_req_button({{ this}});
+                    </script>
+                    {{/data.requirements}}
+                    <div class="form-group" id="contact">
+                        <label>
+                            Add Contacts
+                        </label>
+                        <button type="button" id="con_add">+</button>
+                        <br>
+                    </div>
+                    <script>
+                        function addcon() {
+                            var req = document.getElementById('contact');
+                            //label for contact
+                            const labelnode = document.createElement("label")
+                            labelnode.setAttribute("for", `con-${con_req}`)
+                            labelnode.setAttribute('id', `con_label-${con_req}`);
+                            labelnode.setAttribute('class', `con_label`);
+
+                            //inner text
+                            const textnode = document.createTextNode(`Enter contact ${con_req}`)
+                            labelnode.append(textnode)
+                            req.append(labelnode)
+
+                            //input tag
+                            const inputnode = document.createElement("input")
+                            inputnode.setAttribute("type", "text")
+                            inputnode.setAttribute("class", "form-control")
+                            inputnode.setAttribute("id", `con-${con_req}`)
+                            inputnode.setAttribute("name", "con_control")
+                            inputnode.setAttribute("pattern", '[0-9]{10}')
+                            inputnode.setAttribute("required", 'true')
+                            req.append(inputnode);
+
+                            //Delete Button
+                            const delbutton = document.createElement('button');
+                            delbutton.setAttribute('id', `del_con-${con_req}`);
+                            delbutton.setAttribute('class', 'btn btn-primary');
+                            delbutton.setAttribute('type', 'button');
+                            delbutton.textContent = 'delete contact';
+                            delbutton.addEventListener('click', () => {
+                                var id = delbutton.id.substr(8);
+                                console.log(id);
+                                req.removeChild(document.getElementById('con_label-' + id));
+                                req.removeChild(document.getElementById('con-' + id));
+                                req.removeChild(document.getElementById('del_con-' + id));
+                                req.removeChild(document.getElementById('br_con-' + id));
+
+                                //Change labels now that one less requirement is there
+                                var labels = document.getElementsByClassName("con_label");
+                                for (var k = 0; k < labels.length; k++) {
+                                    labels[k].textContent = `Enter contact ${k + 1}`;
+                                }
+                                con_req--;
+                            })
+                            req.append(delbutton);
+
+                            //Br tag for every requirement
+                            const br = document.createElement('br');
+                            br.setAttribute('id', `br_con-${con_req}`);
+
+                            req.append(br);
+
+
+                            con_req++;
+                        }
+                        document.getElementById("con_add").addEventListener("click", () => {
+                            if (con_req > 4) {
+                                alert("Maximum of 4 contacts allowed");
+                                return false;
+                            }
+                            for (let i = 1; i < con_req; i++) {
+                                let check = document.getElementById(`con-${i}`).value;
+                                if (!check) {
+                                    alert("contact cant be empty")
+                                    return false;
+                                }
+                            }
+                            addcon();
+                        })
+                        document.getElementById('event_date').min = new Date().toISOString().substr(0, 10);
+                        function gen_con_button(text) {
+                            document.getElementById("con_add").click();
+                            document.getElementById(`con-${con_req - 1}`).value = text;
+                        }
+                    </script>
+                    {{#data.contact}}
+                    <script>
+                        gen_con_button({{ this}});
+                    </script>
+                    {{/data.contact}}
+                    <div class="form-group">
+                        <label for="exampleInputFile">
+                            upload a brochure(if any)
+                        </label>
+                        <input type="file" class="form-control-file" id="exampleInputFile">
+                    </div>
+                    <button type="submit" class="btn btn-primary" id="Submit">
+                        Submit
+                    </button>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script src="../public/js/jquery.min.js"></script>
+    <script src="../public/js/bootstrap.min.js"></script>
+    <script src="../public/js/scripts.js"></script>;
+
+
+</body>
+
+</html>

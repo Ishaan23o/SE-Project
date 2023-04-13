@@ -57,6 +57,10 @@ const events = new mongoose.Schema({
             type: String,
             default: "PUBLIC"
         }
+    },
+    max_limit: {
+        type: Number,
+        default: 1000000000
     }
 
 }
