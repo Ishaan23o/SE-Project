@@ -1,633 +1,250 @@
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta content="width=device-width, initial-scale=1" name="viewport" />
-  <title>Document</title>
-  <link rel="stylesheet" href="../public/show_event.css" />
-
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../public/show_event.css">
 </head>
-<style>
-  ::-webkit-scrollbar {
-    width: 20px;
-  }
-
-  ::-webkit-scrollbar-track {
-    background-color: transparent;
-  }
-
-  ::-webkit-scrollbar-thumb {
-    background-color: #d6dee1;
-    border-radius: 20px;
-    border: 6px solid transparent;
-    background-clip: content-box;
-  }
-
-  ::-webkit-scrollbar-thumb:hover {
-    background-color: #a8bbbf;
-  }
-
-  @mixin flexbox {
-    display: -webkit-box;
-    display: -webkit-flex;
-    display: -moz-flex;
-    display: -ms-flexbox;
-    display:
-      flex;
-  }
-
-  @mixin inline-flex {
-    display: -webkit-inline-box;
-    display:
-      -webkit-inline-flex;
-    display: -moz-inline-flex;
-    display: -ms-inline-flexbox;
-    display: inline-flex;
-  }
-
-  @mixin flex-direction($value: row) {
-    @if $value==row-reverse {
-      -webkit-box-direction: reverse;
-      -webkit-box-orient:
-        horizontal;
-    }
-
-    @else if $value==column {
-      -webkit-box-direction: normal;
-      -webkit-box-orient: vertical;
-    }
-
-    @else if $value==column-reverse {
-      -webkit-box-direction: reverse;
-      -webkit-box-orient: vertical;
-    }
-
-    @else {
-      -webkit-box-direction: normal;
-      -webkit-box-orient: horizontal;
-    }
-
-    -webkit-flex-direction: $value;
-    -moz-flex-direction: $value;
-    -ms-flex-direction: $value;
-    flex-direction: $value;
-  }
-
-  @mixin flex-wrap($value: nowrap) {
-    // No Webkit Box fallback. -webkit-flex-wrap:
-    $value;
-    -moz-flex-wrap: $value;
-
-    @if $value==nowrap {
-      -ms-flex-wrap: none;
-    }
-
-    @else {
-      -ms-flex-wrap: $value;
-    }
-
-    flex-wrap: $value;
-  }
-
-  @mixin flex-flow($values: (row nowrap)) {
-    // No Webkit Box fallback.
-    -webkit-flex-flow: $values;
-    -moz-flex-flow: $values;
-    -ms-flex-flow: $values;
-    flex-flow: $values;
-  }
-
-  @mixin order($int: 0) {
-    -webkit-box-ordinal-group:
-      $int + 1;
-    -webkit-order: $int;
-    -moz-order: $int;
-    -ms-flex-order: $int;
-    order: $int;
-  }
-
-  @mixin flex-grow($int: 0) {
-    -webkit-box-flex: $int;
-    -webkit-flex-grow: $int;
-    -moz-flex-grow: $int;
-    -ms-flex-positive: $int;
-    flex-grow: $int;
-  }
-
-  @mixin flex-shrink($int: 1) {
-    -webkit-flex-shrink: $int;
-    -moz-flex-shrink: $int;
-    -ms-flex-negative: $int;
-    flex-shrink: $int;
-  }
-
-  @mixin flex-basis($value: auto) {
-    -webkit-flex-basis: $value;
-    -moz-flex-basis:
-      $value;
-    -ms-flex-preferred-size: $value;
-    flex-basis: $value;
-  }
-
-  @mixin flex($fg: 1, $fs: null, $fb: null) {
-    // Set a variable to be used by
-    box-flex properties $fg-boxflex: $fg; // Box-Flex only supports a flex-grow
-
-    value so let's grab the // first item in the list and just return that. @if
-type-of($fg)=='list' {
-      $fg-boxflex: nth($fg, 1);
-    }
-
-    -webkit-box-flex: $fg-boxflex;
-    -webkit-flex: $fg $fs $fb;
-    -moz-box-flex: $fg-boxflex;
-    -moz-flex: $fg $fs $fb;
-    -ms-flex: $fg $fs $fb;
-    flex: $fg $fs $fb;
-  }
-
-  @mixin justify-content($value: flex-start) {
-    @if $value==flex-start {
-      -webkit-box-pack: start;
-      -ms-flex-pack: start;
-    }
-
-    @else if $value==flex-end {
-      -webkit-box-pack: end;
-      -ms-flex-pack: end;
-    }
-
-    @else if $value==space-between {
-      -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-    }
-
-    @else if $value==space-around {
-      -ms-flex-pack: distribute;
-    }
-
-    @else {
-      -webkit-box-pack: $value;
-      -ms-flex-pack: $value;
-    }
-
-    -webkit-justify-content: $value;
-    -moz-justify-content: $value;
-    justify-content: $value;
-  }
-
-  @mixin align-items($value: stretch) {
-    @if $value==flex-start {
-      -webkit-box-align:
-        start;
-      -ms-flex-align: start;
-    }
-
-    @else if $value==flex-end {
-      -webkit-box-align: end;
-      -ms-flex-align: end;
-    }
-
-    @else {
-      -webkit-box-align:
-        $value;
-      -ms-flex-align: $value;
-    }
-
-    -webkit-align-items: $value;
-    -moz-align-items: $value;
-    align-items: $value;
-  }
-
-  @mixin align-self($value: auto) {
-    // No Webkit Box Fallback. -webkit-align-self: $value;
-    -moz-align-self: $value;
-
-    @if $value==flex-start {
-      -ms-flex-item-align:
-        start;
-    }
-
-    @else if $value==flex-end {
-      -ms-flex-item-align: end;
-    }
-
-    @else {
-      -ms-flex-item-align: $value;
-    }
-
-    align-self: $value;
-  }
-
-  @mixin align-content($value: stretch) {
-    // No Webkit Box Fallback.
-    -webkit-align-content: $value;
-    -moz-align-content: $value;
-
-    @if $value==flex-start {
-      -ms-flex-line-pack: start;
-    }
-
-    @else if $value==flex-end {
-      -ms-flex-line-pack: end;
-    }
-
-    @else {
-      -ms-flex-line-pack: $value;
-    }
-
-    align-content: $value;
-  }
-
-  /*------------------------------*\ ¡VARIABLES
-    \*------------------------------*/
-  $base-spacing-unit: 10px;
-  $tablet-lg: 991px;
-  $tablet: 767px;
-  $phone-lg: 649px;
-  $phone: 540px;
-  $desktop: 1024px;
-  $squeeze: 1024px;
-
-  /*------------------------------*\ ¡CARDS
-    \*------------------------------*/
-  .container {
-    background: #cad4d6;
-    margin:
-      0;
-    box-sizing: border-box;
-    margin: 0 auto;
-    width: 100%;
-  }
-
-  .card-list {
-    @include flexbox();
-    @include flex-wrap(wrap);
-    @include justify-content(flex-start);
-    max-width: 100%;
-  }
-
-  .card-list-item {
-    @include flexbox();
-    @include flex-grow(0);
-    padding: 0 0.5em;
-    list-style: none;
-    transition: width .4s ease-in-out, flex .4s ease-in-out;
-    width: 25%;
-
-    @media screen and (max-width: $desktop) {
-      width: 33.33%;
-    }
-
-    @media screen and (max-width: $tablet) {
-      width: 50%;
-    }
-
-    @media screen and (max-width: $phone-lg) {
-      padding-left: 0;
-      width: 100%;
-    }
-  }
-
-  .card {
-    @include flexbox();
-    @include flex-direction(column);
-    background: rgb(238, 244, 247);
-    border-radius: 2px;
-    padding: 1em;
-    margin-bottom: 1em;
-    width: 100%;
-
-    img {
-      display: block;
-      height: auto;
-      margin: 0 auto;
-      max-width: 100%;
-      width: 100%;
-    }
-
-    &-content {
-      @include flexbox();
-      @include flex-direction(column);
-      @include flex(1 0 auto);
-
-      .card-heading {
-        color: #696969;
-        font-size: 1.25rem;
-        margin:
-          1em 0;
-        font-weight: 300;
-        letter-spacing: 1px;
-        text-transform: uppercase;
-      }
-
-      p {
-        @include flex(1 0 auto);
-        font-size: 0.875rem;
-        line-height: 1.5;
-        margin: 0 0 1em;
-      }
-    }
-  }
-
-  /*------------------------------*\ ¡BUTTONS
-    \*------------------------------*/
-  .btn {
-    border: solid .125em;
-    color: #fff;
-    cursor: pointer;
-    font-weight: 600;
-    padding: .625em 1em;
-    text-transform:
-      uppercase;
-
-    &.btn-lg {
-      font-size: 1.5rem;
-    }
-
-    &.btn-md {
-      font-size: 1.25rem;
-    }
-
-    &.btn-sm {
-      font-size: 1rem;
-    }
-
-    &.primary {
-      background: #34495e;
-      border-color:
-        #34495e;
-
-      &.hollow {
-        background: transparent;
-        color: #34495e;
-      }
-    }
-  }
-
-  /*------------------------------*\ ¡HELPERS
-    \*------------------------------*/
-  .squeeze {
-    position: relative;
-    margin: 0 auto;
-    padding: 0 20px;
-    max-width: $squeeze;
-
-    @media screen and (max-width: $phone-lg) {
-      padding: 0 10px;
-    }
-  }
-
-  .push--top {
-    margin-top: 20px
-  }
-
-  /*------------------------------*\ ¡HEADER
-    \*------------------------------*/
-  header {
-    @include flexbox();
-    @include align-items(stretch);
-    background: steelblue;
-    height: 50px;
-  }
-
-  .logo-container {
-    @include flexbox();
-    @include flex-grow(1);
-    @include align-items(center);
-    padding: 0 0 0 10px;
-  }
-
-  .title {
-    color: #fff;
-    font-weight: 400;
-
-    @media screen and (max-width: $tablet) {
-      font-size: 22px;
-    }
-
-    @media screen and (max-width: $phone-lg) {
-      font-size: 16px;
-    }
-  }
-
-  .nav-container {
-    @include flexbox();
-    @include align-items(center);
-    @include flex-direction(row-reverse);
-    @include flex-grow(4);
-  }
-
-  .link {
-    margin: 0 25px;
-
-    a {
-      color: #fff;
-      text-decoration:
-        none;
-    }
-  }
-
-  /* Add a black background color to the top navigation bar */
-  .topnav {
-    overflow: hidden;
-    background-color: #e9e9e9;
-  }
-
-  /* Style the links
-    inside the navigation bar */
-  .topnav a {
-    float: left;
-    display: block;
-    color:
-      black;
-    text-align: center;
-    text-decoration: none;
-    font-size: 17px;
-  }
-
-  /*
-    Change the color of links on hover */
-  .topnav a:hover {
-    background-color:
-      #2196F3;
-    color: black;
-  }
-
-  /* Style the "active" element to highlight the
-    current page */
-  .topnav a.active {
-    background-color: #2196F3;
-    color:
-      #2196F3;
-  }
-
-  /* Style the search box inside the navigation bar */
-  .topnav input[type=text] {
-    float: right;
-    border: none;
-    font-size: 17px;
-  }
-</style>
-
-<body stye="scrollbar-width: thin;scrollbar-color: #2196F3;">
-
-  <head>
-    <!-- Required meta tags -->
-    <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-
-    <!-- Bootstrap CSS -->
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/css/bootstrap.min.css"
-      integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous" />
-
-  </head>
-
-  <!-- Optional JavaScript -->
-  <!-- jQuery first, then Popper.js, then Bootstrap JS -->
-  <script src="https://code.jquery.com/jquery-3.2.1.slim.min.js"
-    integrity="sha384-KJ3o2DKtIkvYIK3UENzmM7KCkRr/rE9/Qpg6aAZGJwFDMVNA/GpGFF93hXpG5KkN"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/popper.js@1.12.9/dist/umd/popper.min.js"
-    integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
-    crossorigin="anonymous"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.0.0/dist/js/bootstrap.min.js"
-    integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
-    crossorigin="anonymous"></script>
-
-  <div id="container"
-    style="position:absolute;width:100%;height:100%;top:0;bottom:0;right:0;overflow:hidden;background-color: #bbdbf5;border-radius: 0%;">
-    <div class="table-wrapper"
-      style="margin:0;float:left; width:25%;overflow:scroll;height:100%;left:0;top:0;bottom:0;right:0;border-radius:5%">
-      <!--  <div class="topnav" style='width: 100%;padding-top: 10px;'>
-                <input type="text" placeholder="Search.." style='width: inherit;align-self: center'>
-            </div> -->
-      <table class="fl-table" style="margin:0;width:100%;height:100%;left:0;top:0;bottom:0;right:0;">
+<body>
+  
+  <div _ngcontent-d2c-frontend-c195="" class="panel_container ng-tns-c195-1 ng-star-inserted snipcss-M22Ng">
+    <div _ngcontent-d2c-frontend-c195="" class="user_list custom-scrollbar thin ng-tns-c195-1 ng-star-inserted style-VTUPe" id="style-VTUPe">
+      <app-competition-listing _ngcontent-d2c-frontend-c195="" _nghost-d2c-frontend-c170="" class="ng-tns-c195-1 ng-star-inserted">
         <form method="post" action="/register">
-          <div class="input-group input-group-sm mb-3">
-            <div class="input-group-prepend">
-              <span class="input-group-text" id="inputGroup-sizing-sm">paste
-                the code</span>
+        <div style="display:flex;">
+         
+        <input class="_3704LK snipcss-epJrx" type="text" title="Search for products, brands and more" name="register" autocomplete="off" placeholder="Enter the event code(if applicable)" value="">
+
+        <button class="L0Z3Pu snipcss-xLg8X" type="submit">
+          <svg width="20" height="20" viewBox="0 0 17 18" class="" xmlns="http://www.w3.org/2000/svg">
+            <g fill="#2874F1" fill-rule="evenodd">
+              <path class="_34RNph" d="m11.618 9.897l4.225 4.212c.092.092.101.232.02.313l-1.465 1.46c-.081.081-.221.072-.314-.02l-4.216-4.203">
+              </path>
+              <path class="_34RNph" d="m6.486 10.901c-2.42 0-4.381-1.956-4.381-4.368 0-2.413 1.961-4.369 4.381-4.369 2.42 0 4.381 1.956 4.381 4.369 0 2.413-1.961 4.368-4.381 4.368m0-10.835c-3.582 0-6.486 2.895-6.486 6.467 0 3.572 2.904 6.467 6.486 6.467 3.582 0 6.486-2.895 6.486-6.467 0-3.572-2.904-6.467-6.486-6.467">
+              </path>
+            </g>
+          </svg>
+        </button>
+      </div>
+      </app-competition-listing>
+      <br>
+      {{#data}}
+      <form action="/find_event " method="get">
+        <input type="hidden" name="ID" value="{{scope.code}}" />
+      <app-competition-listing _ngcontent-d2c-frontend-c195="" _nghost-d2c-frontend-c170="" class="ng-tns-c195-1 ng-star-inserted">
+        <div _ngcontent-d2c-frontend-c170="" class="single_profile ng-star-inserted" id="opp_665435">
+          <div _ngcontent-d2c-frontend-c170="" class="j-between user_img opp_content">
+            <div _ngcontent-d2c-frontend-c170="" class="img">
+              <img _ngcontent-d2c-frontend-c170="" width="50" height="50" loading="lazy" alt="Research Contractor- Consumer Goods" src="https://d8it4huxumps7.cloudfront.net/uploads/images/150x150/643708a485527_BCG_LOGO.jpg">
             </div>
-            <input type="text" name="register" class="form-control" aria-label="Small"
-              aria-describedby="inputGroup-sizing-sm" />
+            <div _ngcontent-d2c-frontend-c170="" class="content">
+              <h2 _ngcontent-d2c-frontend-c170="">
+                {{event_name}}
+              </h2>
+        
+            </div>
           </div>
-          <button type="submit" class="btn btn-primary">Register</button>
-        </form>
-        <thead>
-          <tr>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody style="width:95%;">
-          {{#data}}
-          <tr style="width:inherit;">
-            <td>
-              <div class="card">
-                <div class="card-image" style="width:inherit;">
-                  <img src="https://th.bing.com/th/id/OIP.kQB9XFdPTlin3KQdUaJUfQHaDt?pid=ImgDet&rs=1"
-                    style="width:inherit;" alt="placeholder" />
-                </div>
-                <div class="card-content" style="width:inherit;">
-                  <h3 class="card-heading">{{event_name}}</h3>
-                  <p>{{formatTime date.event_date "MM-DD-YYYY"}}</p>
-                  <form action="/find_event" method="get">
-                    <input type="hidden" name="ID" value="{{scope.code}}" />
-                    <button class="btn btn-sm primary" type="submit" name="button">VIEW DETAILS</button>
-                  </form>
+         
+          <div _ngcontent-d2c-frontend-c170="" class="other_fields align-center">
+          
+            <div _ngcontent-d2c-frontend-c170="" class="seperate_box align-center ng-star-inserted">
+              <img _ngcontent-d2c-frontend-c170="" src="https://cdn.unstop.com/uploads/images/unstop/icons/day_left_icon.svg" alt="deadline" width="18" height="17" loading="lazy">
+              {{formatTime date.event_date "MM-DD-YYYY"}}
+             
+            </div>
+            <div _ngcontent-d2c-frontend-c198="" class="hero-btn-group snipcss-Kp4Zd">
+              <button _ngcontent-d2c-frontend-c198="" class="btn waves-effect">
+                Explore Now
+              </button>
+             
+            </div>
+          </div>
+        </div>
+      </app-competition-listing>
+    </form>
+      {{/data}}
+     
+      
+    </div>
+    {{#event_data}}
+    <div _ngcontent-d2c-frontend-c195="" class="right_bar box ng-tns-c195-1 ng-trigger ng-trigger-slideInUpOnEnter ng-animate-disabled ng-star-inserted style-8VbUo" id="style-8VbUo">
+      <app-competition-preview _ngcontent-d2c-frontend-c195="" class="ng-tns-c195-1" _nghost-d2c-frontend-c194="">
+        <div _ngcontent-d2c-frontend-c194="" class="mobile_header">
+          <span _ngcontent-d2c-frontend-c194="" class="material-icons">
+            close
+          </span>
+          <div _ngcontent-d2c-frontend-c194="" class="single-wrap m_title">
+            Research Contractor- Consumer Goods
+          </div>
+          <div _ngcontent-d2c-frontend-c194="" class="m_btn">
+            Preview
+          </div>
+        </div>
+       
+        <app-explore-opportunity-viewer _ngcontent-d2c-frontend-c194="" _nghost-d2c-frontend-c193="" class="ng-star-inserted style-MnGAT" id="style-MnGAT">
+          <div _ngcontent-d2c-frontend-c193="" class="all_box_wrapper ng-star-inserted">
+            <app-competition-basic-form _ngcontent-d2c-frontend-c193="" _nghost-d2c-frontend-c178="">
+              <div _ngcontent-d2c-frontend-c178="" class="wrapper reg_open_page">
+                <div _ngcontent-d2c-frontend-c178="" class="inner has-bg">
+                  <div _ngcontent-d2c-frontend-c178="" class="listing_dt_logo-box ng-star-inserted">
+                    <img _ngcontent-d2c-frontend-c178="" src="https://d8it4huxumps7.cloudfront.net/uploads/images/63dba42b07b2f_open_in_new.svg" alt="open in new" class="open_in_new ng-star-inserted" loading="lazy">
+                    <div _ngcontent-d2c-frontend-c178="" class="d2c-container">
+                      <div _ngcontent-d2c-frontend-c178="" class="my_sect">
+                        <div _ngcontent-d2c-frontend-c178="" class="img">
+                          <img _ngcontent-d2c-frontend-c178="" width="110" height="110" noloading="true" alt="Research Contractor- Consumer Goods / jobs" src="https://d8it4huxumps7.cloudfront.net/uploads/images/150x150/643708a485527_BCG_LOGO.jpg?d=110x110" class="ng-star-inserted">
+                        </div>
+                        <div _ngcontent-d2c-frontend-c178="" class="cptn 456">
+                          <h1 _ngcontent-d2c-frontend-c178="" class="h1_title ng-star-inserted">
+                            {{event_name}}
+                           
+                          </h1>
+                         
+                        </div>
+                      </div>
+                      <div _ngcontent-d2c-frontend-c178="" class="tags ng-star-inserted">
+                       
+                      </div>
+                    </div>
+                  </div>
+                  <div _ngcontent-d2c-frontend-c178="" class="mobile_menu">
+                    <div _ngcontent-d2c-frontend-c178="" class="watch_list ng-star-inserted">
+                    
+                    </div>
+                    <div _ngcontent-d2c-frontend-c178="" class="register_sect ng-star-inserted">
+                      <div _ngcontent-d2c-frontend-c178="" class="reg_fee ng-star-inserted">
+                      </div>
+                      {{#if registered}}
+                      <form action="/cancel_register" method="post">
+                      <button  name="register"  _ngcontent-d2c-frontend-c178="" target="_blank" class="cancel_register_btn cursor waves-effect ng-star-inserted" type="submit" value="{{scope.code}}">
+                        Cancel Registration
+                      </button>
+                    </form>
+                    {{else}}
+                    <form action="/register" method="post">
+                      <button name="register" _ngcontent-d2c-frontend-c178="" target="_blank" class="register_btn cursor waves-effect ng-star-inserted" type="submit" value="{{scope.code}}">
+                        Register
+                      </button>
+                    </form>
+                    {{/if}}
+                    </div>
+                  </div>
+                  <div _ngcontent-d2c-frontend-c178="" class="r_box ng-star-inserted">
+                    <div _ngcontent-d2c-frontend-c178="" class="reg_box">
+                      <div _ngcontent-d2c-frontend-c178="" class="item ng-star-inserted">
+                        <div _ngcontent-d2c-frontend-c178="" class="-text icon-days_left icon-wrapper">
+                        </div>
+                        <span _ngcontent-d2c-frontend-c178="">
+                          Registration Deadline 
+                          <strong _ngcontent-d2c-frontend-c178="">
+                            {{formatTime date.registration "MM-DD-YYYY"}} 
+                          </strong>
+                        </span>
+                      </div>
+                      <div _ngcontent-d2c-frontend-c178="" class="item ng-star-inserted">
+                        <div _ngcontent-d2c-frontend-c178="" class="-text icon-views icon-wrapper">
+                        </div>
+                        <span _ngcontent-d2c-frontend-c178="">
+                          Event date
+                          <strong _ngcontent-d2c-frontend-c178="">
+                            {{formatTime
+                              date.event_date
+                              "MM-DD-YYYY"
+                            }} 
+                          </strong>
+                        </span>
+                      </div>
+                    </div>
+                    <div _ngcontent-d2c-frontend-c178="" class="eligibility_sect ng-star-inserted">
+                      <div _ngcontent-d2c-frontend-c178="" class="el-name">
+                        Fees
+                      </div>
+                      <div _ngcontent-d2c-frontend-c178="" class="e_bg">
+                        <div _ngcontent-d2c-frontend-c178="" class="items ng-star-inserted">
+                          <div _ngcontent-d2c-frontend-c178="" class="eligi ng-star-inserted">
+                            {{fee}}
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
                 </div>
               </div>
-            </td>
-          </tr>
-          {{/data}}
-        </tbody>
-      </table>
-    </div>
-    <div id="right"
-      style="float:right; width:75%;max-height:100%;height:100%;display: block;overflow-y: scroll;overflow-x: hidden;">
-      <h1 id="no_event">NO EVENT SELECTED YET</h1>
-      {{#event_data}}
-      <div style="width:100%;background-color: #d8e4e9; position:relative;display: flexbox;;">
-        <img src="https://th.bing.com/th/id/OIP.kQB9XFdPTlin3KQdUaJUfQHaDt?pid=ImgDet&rs=1"
-          style="width:180px;height:120px;display: inline-block;margin-top: 20px;margin-left: 20px;"
-          alt="placeholder" />
-        <div style="background-color: #d8e4e9 ;position: absolute;top:25%;left:42%;margin:0;padding:0%;display:inline;">
-          <h1 style="text-align: center;padding: 0%;margin: 0;">
-            {{event_name}}
-          </h1>
-        </div>
-      </div>
-      <div style="margin:0;width:100%;background-color: #d8e4e9 ;position:relative;margin-top: 1px;">
-        <div
-          style="margin-left:1%;width:100%;padding:5px;background-color: #d8e4e9 ;position:relative;margin-top: 1px;height:15%">
-          <div style="padding:5px;margin:5px">Registration deadline:
-            {{formatTime date.registration "MM-DD-YYYY"}}</div>
-          <div style="padding:5px;">Event Date:{{formatTime
-            date.event_date
-            "MM-DD-YYYY"
-            }}</div>
-          <div style="padding:5px;">Timing: {{time}}</div>
-          <div style="padding:5px;">Fee: {{fee}}</div>
-          <div style="padding:5px;">Contact :
-            {{#if (array contact)}}
-            {{#each contact}}
-            <div>{{this}}</div>
-            {{/each}}
-            {{else}}
-            <div>{{contact}}</div>
-            {{/if}}
+            </app-competition-basic-form>
+            <app-competition-about-form _ngcontent-d2c-frontend-c193="" _nghost-d2c-frontend-c182="" class="1 bg ng-star-inserted">
+              <div _ngcontent-d2c-frontend-c182="" class="wrapper about_opp_page">
+                <div _ngcontent-d2c-frontend-c182="" class="inner">
+                  <div _ngcontent-d2c-frontend-c182="" id="tab-detail" class="-border-after about_game position-relative tab-detail">
+                    <div _ngcontent-d2c-frontend-c182="" class="d2c-container">
+                      <h2 _ngcontent-d2c-frontend-c182="" class="-border hdng ng-star-inserted">
+                        All about this event!
+                      </h2>
+                      <div _ngcontent-d2c-frontend-c182="" class="-border d2c_editor_text ng-star-inserted">
+                        <p>
+                        
+                          <strong>
+                            Description-:
+                          </strong>
+                        </p>
+                       {{description}}
+                       <br>
+                       <br>
+                       <br>
+                        <p>
+                          <strong>
+                            Requirements:
+                          </strong>
+                        </p>
+
+                        <ul>
+                          {{#each requirements}}
+                          <li>
+                            {{this}}
+                          </li>
+                            {{/each}}
+                        </ul>
+                        <br>
+                        <br>
+                        <br>
+                         <p>
+                           <strong>
+                             Contacts:
+                           </strong>
+                         </p>
+ 
+                         <ul>
+                          {{#if (array contact)}}
+
+                           {{#each contact}}
+
+                           <li>
+                             {{this}}
+                           </li>
+                             {{/each}}
+
+                             {{else}}
+                             <li>
+                              {{contact}}
+                            </li>
+
+                            {{/if}}
+                         </ul>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </app-competition-about-form>
+           
+          
           </div>
-        </div>
-      </div>
-      <div style="margin:0;width:100%;background-color: #d8e4e9 ;position:relative;margin-top:1px;height:30%;">
-        <div
-          style="margin-left:1%;width:100%;padding:5px;background-color: #d8e4e9 ;position:relative;margin-top: 1px;height:15%">
-          <h1 style="text-align: center;padding: 0%;margin: 0;">Requirements</h1>
-          {{#each requirements}}
-          <div style="padding:5px;">{{this}}</div>
-          {{/each}}
-        </div>
-      </div>
-      <div style="margin:0;width:100%;background-color: #d8e4e9 ;position:relative;margin-top:1px;height:30%;">
-        <h1 style="text-align: center;padding: 0%;margin: 0;">Description</h1>
-        <div style="padding:5px;">
-          <div style="margin-left:1%;width:100%;background-color: #d8e4e9 ;position:relative;margin-top: 1px;">
-            {{description}}
-          </div>
-        </div>
-      </div>
-      <div
-        style="margin:0;width:100%;background-color: #d8e4e9 ;position:relative;margin-top:1px;height:10%;padding: 0;">
-        {{#if registered}}
-        <form style="height:100%;" action="/cancel_register" method="post">
-
-          <button style="top:20%;left:45%;position: relative;" type="submit" name="register" value="{{scope.code}}">
-            <div style="padding:10px;">
-              Cancel Registration
-            </div>
-          </button>
-        </form>
-
-        {{else}}
-        <form style="height:100%;" action="/register" method="post">
-
-          <button style="top:20%;left:45%;position: relative;" type="submit" name="register" value="{{scope.code}}">
-            <div style="padding:10px;">
-              Register
-            </div>
-          </button>
-
-        </form>
-        {{/if}}
-      </div>
-      <script>
-        document.getElementById('right').removeChild(document.getElementById('no_event'));
-      </script>
-      {{/event_data}}
-
+        </app-explore-opportunity-viewer>
+        {{/event_data}}
+      </app-competition-preview>
     </div>
   </div>
+  
+      
 </body>
-
 </html>
