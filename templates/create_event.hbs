@@ -31,7 +31,7 @@
 				<div class="container-fluid" style="height: 90%; margin: 1%;">
 					<div class="row" style=" height: 95%px; margin-bottom: 1%;">
 						<div class="col-md-12">
-							<form action="/new_event" method="post" style="margin: 1%;">
+							<form action="/new_event" method="post" enctype="multipart/form-data" style="margin: 1%;">
 
 								<div class="form-group">
 									<div class="input_box">
@@ -135,7 +135,7 @@
 										<div style="margin-left: 0px; font-size: larger;"> Upload Brochure </div>
 									</label>
 									<div class="input_box" style="margin-left: 0px;">
-										<input type="file" class="form-control-file" id="exampleInputFile"
+										<input type="file" name="brochure" class="form-control-file" id="exampleInputFile"
 											placeholder="hcd" style="color: #4d5259;">
 									</div>
 								</div>

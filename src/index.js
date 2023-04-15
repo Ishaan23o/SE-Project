@@ -3,11 +3,22 @@ const app = express()
 const path = require("path")
 const hbs = require("hbs")
 const moment = require('moment')
+const fs=require('fs')
 const event_controllers = require("../controllers/events.controller")
 const login_controllers = require("../controllers/login.controller")
 const registrations_controllers = require("../controllers/registrations.controller")
 const notification_controllers = require("../controllers/notifications.controller")
 const templates_path = path.join(__dirname, '../templates')
+const multer=require('multer')
+let storage=multer.diskStorage({
+  destination:'public/images/',
+  filename:(req,file,cb)=>{
+    cb(null,file.originalname)
+  }
+})
+let upload=multer({
+  storage:storage
+})
 app.use(express.json())
 app.set("view engine", "hbs")
 app.set("views", templates_path)
@@ -37,6 +48,7 @@ app.post("/edited_event", registrations_controllers.edited_event)
 app.post("/delete_event", registrations_controllers.delete_event)
 
 app.post("/signup", login_controllers.signup)
+app.post("/new_event",upload.single('brochure'),event_controllers.create_event)
 app.post("/login", login_controllers.login)
 
 app.get("/notif_clicked", notification_controllers.clicked_notif)

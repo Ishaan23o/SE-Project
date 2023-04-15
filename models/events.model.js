@@ -61,6 +61,11 @@ const events = new mongoose.Schema({
     max_limit: {
         type: Number,
         default: 1000000000
+    },
+    image:
+    {
+        data: String,
+        contentType: String
     }
 
 }

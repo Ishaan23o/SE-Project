@@ -1,5 +1,8 @@
 const event_collection = require("../models/events.model")
 const registration_collection = require("../models/registration.model")
+const fs=require('fs')
+const path = require("path")
+const btoa=require("btoa")
 const notification_collection = require("../models/notification.model")
 async function create_event(req, res) {
   let cur_status = ""
@@ -27,7 +30,11 @@ async function create_event(req, res) {
     fees: req.body.event_fee,
     contact: contact,
     requirements: requirements,
-    scope: scope
+    scope: scope,
+    image: {
+      data: btoa(fs.readFileSync(path.join(__dirname , '..','public' ,'images', req.file.filename))),
+      contentType: 'image/png'
+  }
   }
   var id = require("crypto").randomBytes(64).toString('hex');
   let find_code = await event_collection.find({ "scope.code": id }).count();
