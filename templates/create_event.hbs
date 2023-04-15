@@ -2,193 +2,262 @@
 <html lang="en">
 
 <head>
-	<meta charset="utf-8">
+	<meta charset="UTF-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
-	<meta name="viewport" content="width=device-width, initial-scale=1">
-
-	<title>create_event</title>
-
-	<meta name="description" content="Source code generated using layoutit.com">
-	<meta name="author" content="LayoutIt!">
-
-	<link href="../public/event_css/bootstrap.min.css" rel="stylesheet">
-	<link href="../public/event_css/style.css" rel="stylesheet">
-
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<title>Document</title>
+	<link rel="stylesheet" href="../public/create_event/check.css">
 </head>
 
 <body>
 
-	<div class="container-fluid">
-		<div class="row">
-			<div class="col-md-12">
-				<form action="/new_event" method="post">
-					<div class="form-group">
-						<label for="event_name">
-							Event name
-						</label>
-						<input class="form-control" name="event_name" id="event_name" required>
+	<!-- <body style="background-image: linear-gradient(45 deg,#bd047f0c,#e88e0600);"> -->
+	<div class="banner">
+		<header class="container">
+
+			<div class="nav-bg-fostrap">
+				<div class="navbar-fostrap">xxx</div>
+				<a href="" class="title-mobile">Fostrap</a>
+			</div>
+		</header>
+		<h1 style="color: aliceblue; margin-left: 670px; padding-top: 50px;">CREATE EVENT</h1>
+		<!-- <div class="card-layer" style="height: 1100px; width: 950px; background-image: linear-gradient(rgba(4,9,30,0.7), rgba(4,9,30,0.7));" > -->
+		<div class="card-layer" style="height: 1100px; width: 1150px; margin-right: 210px;  margin-bottom: 1%; ">
+			<!-- background-image:linear-gradient(45deg,#bd0480,#e88e06) -->
+			<!-- style="background-image:linear-gradient(170deg,#ed44b5,#eab043,#ffffff)" -->
+
+			<div class="card-pay"
+				style="height: 83%; width: 1400px; margin-left: 70px; border-radius: 60px;  margin-bottom: 1%;overflow-y: scroll;">
+				<div class="container-fluid" style="height: 90%; margin: 1%;">
+					<div class="row" style=" height: 95%px; margin-bottom: 1%;">
+						<div class="col-md-12">
+							<form action="/new_event" method="post" style="margin: 1%;">
+
+								<div class="form-group">
+									<div class="input_box">
+										<input class="form-control" name="event_name" id="event_name"
+											placeholder="Event Name" required>
+									</div>
+
+									<br>
+								</div>
+								<div class="form-group">
+									<div class="input_box">
+										<div style="margin-left: 20px; font-size: larger;"> Event Date </div>
+										<input type="date" class="form-control" name="event_date" id="event_date" min=""
+											placeholder="Event Date" style="color:#4d5259;" required>
+									</div>
+								</div>
+								<br>
+								<br>
+								<div class="form-group">
+									<div class="input_box">
+										<textarea class="form-control" name="event_desc" id="event_desc"
+											placeholder="Event Description" required
+											style='overflow:hidden;resize:none;'></textarea>
+									</div>
+								</div>
+								<br>
+
+								<div class="form-group">
+									<div class="input_box">
+										<input type="number" min="0" max="10000" class="form-control" name="event_fee"
+											id="event_fee" placeholder="Event Fee" required>
+									</div>
+								</div>
+								<br>
+
+								<div class="form-group">
+									<div class="input_box">
+										<div style="margin-left: 20px; font-size: larger;"> Registration Date </div>
+										<input type="date" class="form-control" name="registration_date"
+											id="registration_date" value="1970-01-01">
+									</div>
+								</div>
+								<br>
+								<br>
+								<div class="form-group">
+									<div class="input_box">
+										<div style="margin-left: 20px; font-size: larger;"> Event Time </div>
+										<input type="time" class="form-control" name="event_time" id="event_time"
+											required>
+									</div>
+								</div>
+								<br>
+
+
+								<br>
+								<div style="display: flex; margin-left: 10px;">
+
+									<div class="form-group">
+										<div class="input_box" style="display: flex; margin-left: 59px; ">
+											<div style="margin-left: 2px; font-size: larger;"> Event Type </div>
+											<div style="margin-left: 40px;">
+												<div class="select">
+													<select name="event_type" id="event_type" class="form-control"
+														required>
+														<option value="online"><span style="color: black;">
+																Online</span></option>
+														<option value="offline">Offline</option>
+														<option value="hybrid">Hybrid</option>
+													</select>
+												</div>
+
+
+
+
+
+											</div>
+										</div>
+									</div>
+
+
+
+									<div class="form-group" style="margin-left: 200px;">
+										<div class="input_box" style="display: flex; margin-left: 30px;">
+											<div style="margin-left: 1px; font-size: larger;"> Event Scope </div>
+											<div style="margin-left: 40px;">
+												<select name="event_scope" id="event_scope" class="form-control"
+													style="background-color: rgb(249, 243, 237);" required>
+													<option value="private">Private</option>
+													<option value="public" selected>Public</option>
+												</select>
+											</div>
+										</div>
+									</div>
+
+								</div>
+
+
+
+								<div class="form-group" style="margin-left: 72px; display: inline-flex;">
+									<label for="exampleInputFile" style="width: 200px;">
+										<div style="margin-left: 0px; font-size: larger;"> Upload Brochure </div>
+									</label>
+									<div class="input_box" style="margin-left: 0px;">
+										<input type="file" class="form-control-file" id="exampleInputFile"
+											placeholder="hcd" style="color: #4d5259;">
+									</div>
+								</div>
+
+
+
+								<br><br>
+								<div style="display: flex;">
+									<div class="form-group" id="req" style="  margin-left: 54px;">
+										<label style="display:inline-block">
+											<div style="margin-left: 20px; font-size: larger;">Add Requirements </div>
+										</label>
+										<button type="button" id="req_add" style="display:inline-block">+</button>
+										<br>
+									</div>
+									<div class="form-group" id="contact" style="margin-left: 290px;">
+										<label style=" font-size: larger;margin-left:6px">
+											Add Contacts
+										</label>
+										<button type="button" id="con_add">+</button>
+										<br>
+									</div>
+
+								</div>
+								<button type="submit" class="btn btn-primary " id="Submit"
+									style="margin-left: 44%; margin-top: 9%;margin-bottom:10%">
+									Submit
+								</button>
+
+							</form>
+						</div>
 					</div>
-					<div class="form-group">
-						<label for="event_date">
-							Event date
-						</label>
-						<input type="date" class="form-control" name="event_date" id="event_date" min="" required>
-					</div>
-					<div class="form-group">
-						<label for="registration_date">
-							Registration deadline (Optional)
-						</label>
-						<input type="date" class="form-control" name="registration_date" id="registration_date"
-							value="1970-01-01">
-					</div>
-					<div class="form-group">
-						<label for="event_time">
-							Event Time
-						</label>
-						<input type="time" class="form-control" name="event_time" id="event_time" required>
-					</div>
-					<div class="form-group">
-						<label for="event_type">
-							Event type
-						</label>
-						<select name="event_type" id="event_type" class="form-control" required>
-							<option value="online">online</option>
-							<option value="offline">offline</option>
-							<option value="hybrid">hybrid</option>
-						</select>
-					</div>
-					<div class="form-group">
-						<label for="event_desc">
-							Event description
-						</label>
-						<textarea class="form-control" name="event_desc" id="event_desc" required></textarea>
-					</div>
-					<div class="form-group">
-						<label for="event_fee">
-							Event Fee
-						</label>
-						<input type="number" min="0" max="10000" class="form-control" name="event_fee" id="event_fee"
-							required>
-					</div>
-					<div class="form-group">
-						<label for="event_scope">
-							Event type
-						</label>
-						<select name="event_scope" id="event_scope" class="form-control" required>
-							<option value="private">private</option>
-							<option value="public" selected>public</option>
-						</select>
-					</div>
-					<div class="form-group" id="req">
-						<label>
-							Add Requirements
-						</label>
-						<button type="button" id="req_add">+</button>
-						<br>
-					</div>
-					<div class="form-group" id="contact">
-						<label>
-							Add Contacts
-						</label>
-						<button type="button" id="con_add">+</button>
-						<br>
-					</div>
-					<div class="form-group">
-						<label for="exampleInputFile">
-							upload a brochure(if any)
-						</label>
-						<input type="file" class="form-control-file" id="exampleInputFile">
-					</div>
-					<button type="submit" class="btn btn-primary" id="Submit">
-						Submit
-					</button>
-				</form>
+				</div>
 			</div>
 		</div>
-	</div>
-
-	<script src="../public/js/jquery.min.js"></script>
-	<script src="../public/js/bootstrap.min.js"></script>
-	<script src="../public/js/scripts.js"></script>;
-
-	<script>
-
-		let num_req = 1;
-		let con_req = 1;
-		document.getElementById("req_add").addEventListener("click", () => {
 
 
-			if (num_req > 10) {
-				alert("Maximum of 10 descriptions allowed");
-				return false;
-			}
-			let req = document.getElementById('req');
-			let isadd = 1;
-			if (num_req > 1) {
-				for (let i = 1; i < num_req; i++) {
-					let check = document.getElementById(`req-${i}`).value;
-					if (!check) {
-						alert("requirements cant be empty")
-						isadd = 0;
-						break;
-					}
-				}
-			}
-			if (isadd === 1) {
+		<script src="../public/js/jquery.min.js"></script>
+		<script src="../public/js/bootstrap.min.js"></script>
+		<script src="../public/js/scripts.js"></script>;
 
-				const labelnode = document.createElement("label")
-				labelnode.setAttribute("for", `req-${num_req}`)
-				const textnode = document.createTextNode(`Enter requirement ${num_req}`)
-				labelnode.append(textnode)
-				req.append(labelnode)
-				const inputnode = document.createElement("input")
-				inputnode.setAttribute("type", "text")
-				inputnode.setAttribute("class", "form-control")
-				inputnode.setAttribute("id", `req-${num_req}`)
-				inputnode.setAttribute("name", "req_control")
+		<script>
 
-				req.append(inputnode);
-				num_req++;
-			}
-		})
+			let num_req = 1;
+			let con_req = 1;
+			document.getElementById("req_add").addEventListener("click", () => {
 
-		function addcon() {
-			var req = document.getElementById('contact');
-			const labelnode = document.createElement("label")
-			labelnode.setAttribute("for", `con-${con_req}`)
-			const textnode = document.createTextNode(`Enter contact ${con_req}`)
-			labelnode.append(textnode)
-			req.append(labelnode)
-			const inputnode = document.createElement("input")
-			inputnode.setAttribute("type", "text")
-			inputnode.setAttribute("class", "form-control")
-			inputnode.setAttribute("id", `con-${con_req}`)
-			inputnode.setAttribute("name", "con_control")
-			inputnode.setAttribute("pattern", '[0-9]{10}')
-			inputnode.setAttribute("required", 'true')
-			req.append(inputnode);
-			con_req++;
-		}
 
-		addcon();
-		document.getElementById("con_add").addEventListener("click", () => {
-			if (con_req > 4) {
-				alert("Maximum of 4 contacts allowed");
-				return false;
-			}
-			for (let i = 1; i < con_req; i++) {
-				let check = document.getElementById(`con-${i}`).value;
-				if (!check) {
-					alert("contact cant be empty")
+				if (num_req > 10) {
+					alert("Maximum of 10 descriptions allowed");
 					return false;
 				}
+				let req = document.getElementById('req');
+				let isadd = 1;
+				if (num_req > 1) {
+					for (let i = 1; i < num_req; i++) {
+						let check = document.getElementById(`req-${i}`).value;
+						if (!check) {
+							alert("requirements cant be empty")
+							isadd = 0;
+							break;
+						}
+					}
+				}
+				if (isadd === 1) {
+					const div = document.createElement('div');
+					div.classList.add('input_box')
+					div.setAttribute('style', 'margin-left:20px');
+					const inputnode = document.createElement("input")
+					inputnode.setAttribute("type", "text")
+					inputnode.setAttribute("class", "form-control")
+					inputnode.setAttribute("id", `req-${num_req}`)
+					inputnode.setAttribute("name", "req_control")
+					inputnode.setAttribute('placeholder', `Enter requirement ${num_req}`);
+					div.append(inputnode)
+					req.append(div);
+					req.append(document.createElement('br'));
+					num_req++;
+				}
+			})
+
+			function addcon() {
+				var req = document.getElementById('contact');
+				const div = document.createElement('div');
+				div.classList.add('input_box')
+				const inputnode = document.createElement("input")
+				inputnode.setAttribute('placeholder', `Enter contact ${con_req}`);
+				inputnode.setAttribute("type", "text")
+				inputnode.setAttribute("class", "form-control")
+				inputnode.setAttribute("id", `con-${con_req}`)
+				inputnode.setAttribute("name", "con_control")
+				inputnode.setAttribute("pattern", '[0-9]{10}')
+				inputnode.setAttribute("required", 'true')
+				div.append(inputnode)
+				req.append(div);
+				req.append(document.createElement('br'));
+				con_req++;
 			}
 
 			addcon();
-		})
-		document.getElementById('event_date').min = new Date().toISOString().substr(0, 10);
+			document.getElementById("con_add").addEventListener("click", () => {
+				if (con_req > 4) {
+					alert("Maximum of 4 contacts allowed");
+					return false;
+				}
+				for (let i = 1; i < con_req; i++) {
+					let check = document.getElementById(`con-${i}`).value;
+					if (!check) {
+						alert("contact cant be empty")
+						return false;
+					}
+				}
 
-	</script>
+				addcon();
+			})
+			document.getElementById('event_date').min = new Date().toISOString().substr(0, 10);
+
+		</script>
+	</div>
+	</div>
+	<script src="../public/create_event/create.js"></script>
+	</div>
 </body>
 
 </html>

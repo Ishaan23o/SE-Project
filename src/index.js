@@ -6,6 +6,7 @@ const moment = require('moment')
 const event_controllers = require("../controllers/events.controller")
 const login_controllers = require("../controllers/login.controller")
 const registrations_controllers = require("../controllers/registrations.controller")
+const notification_controllers = require("../controllers/notifications.controller")
 const templates_path = path.join(__dirname, '../templates')
 app.use(express.json())
 app.set("view engine", "hbs")
@@ -23,16 +24,22 @@ app.get("/new_event", (req, res) => {
 app.get("/private_registration", (req, res) => {
   res.render("private_registration")
 })
+
+
 app.get("/find_event", event_controllers.find_event)
-app.post("/register", registrations_controllers.register)
 app.get("/show_event", event_controllers.show_event)
 app.get("/show_registered_events", event_controllers.show_registered_event)
-app.post("/signup", login_controllers.signup)
+app.post("/new_event", event_controllers.create_event)
+
+app.post("/register", registrations_controllers.register)
 app.post("/edit_event", registrations_controllers.edit_event)
 app.post("/edited_event", registrations_controllers.edited_event)
 app.post("/delete_event", registrations_controllers.delete_event)
-app.post("/new_event", event_controllers.create_event)
+
+app.post("/signup", login_controllers.signup)
 app.post("/login", login_controllers.login)
+
+app.get("/notif_clicked", notification_controllers.clicked_notif)
 app.listen(3000, () => {
   console.log("port connected");
 })
@@ -49,4 +56,9 @@ hbs.handlebars.registerHelper('array', function (elem) {
 
 hbs.handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
   return (arg1 == arg2) ? options.fn(this) : options.inverse(this);
+});
+
+hbs.handlebars.registerHelper('notEmpty', function (arg1) {
+  if (arg1.length) return false;
+  return Object.keys(arg1).length != 0;
 });

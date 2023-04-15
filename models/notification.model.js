@@ -11,11 +11,10 @@ const notification_schema = new mongoose.Schema({
         type: String
     },
     Events: {
-        Event_ID: {
+        type: {}
+    }
 
-        }
-    },
 }
 )
-const collection = new mongoose.model("Users", sign_up_schema)
+const collection = new mongoose.model("notification", notification_schema)
 module.exports = collection

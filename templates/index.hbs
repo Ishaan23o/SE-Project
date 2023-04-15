@@ -9,6 +9,10 @@
     </style>
     <meta charset="utf-8">
     <title>Event Management Software | The Event Architects</title>
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.5.0/css/all.css"
+        integrity="sha384-B4dIYHKNBt8Bc12p+WXckhzcICo0wtJAoU8YZTY5qE0Id1GSseTk6S+L3BlXeVIU" crossorigin="anonymous">
+    <link href="https://fonts.googleapis.com/css?family=Raleway" rel="stylesheet">
+
     <meta
         content="The Event Architects is the only enterprise-grade event management platform that is easy to use and customize. We have all the tools you need to manage your next virtual, hybrid or in-person event."
         name="description">
@@ -401,12 +405,78 @@
         src="https://googleads.g.doubleclick.net/pagead/viewthroughconversion/959962094/?random=1679530171956&amp;cv=11&amp;fst=1679530171956&amp;bg=ffffff&amp;guid=ON&amp;async=1&amp;gtm=45be33k0&amp;u_w=1536&amp;u_h=864&amp;url=https%3A%2F%2Fwww.The Event Architects.com%2F&amp;ref=https%3A%2F%2Fwww.google.com%2F&amp;hn=www.googleadservices.com&amp;frm=0&amp;tiba=Event%20Management%20Software%20%7C%20The Event Architects&amp;did=dZTQ1Zm&amp;gdid=dZTQ1Zm&amp;auid=1198088624.1679530126&amp;uaa=x86&amp;uab=64&amp;uafvl=Google%2520Chrome%3B111.0.5563.65%7CNot(A%253ABrand%3B8.0.0.0%7CChromium%3B111.0.5563.65&amp;uamb=0&amp;uap=Windows&amp;uapv=10.0.0&amp;uaw=0&amp;data=event%3Dgtag.config&amp;rfmt=3&amp;fmt=4"></script>
     <meta http-equiv="origin-trial"
         content="AxMeahpLO9nDB/vFXFMGOd/JLhKWx/mOjErAi0qFXDzWuMSYoKpfjFtFfQWMCx+Qg39PMxDJHSLlAJF/H8rtmAwAAABveyJvcmlnaW4iOiJodHRwczovL3MucGluaW1nLmNvbTo0NDMiLCJmZWF0dXJlIjoiUHJpdmFjeVNhbmRib3hBZHNBUElzIiwiZXhwaXJ5IjoxNjgwNjUyNzk5LCJpc1RoaXJkUGFydHkiOnRydWV9">
+    <link rel="stylesheet" href="../public/notif_js_css/notif.css">
 </head>
 
 
 <body>
 
+    <header style="position:absolute;top:0;" class='ghanti'>
+        <nav class="navbar ghanti">
+            <div class="logo ghanti">
+                <ion-icon name="logo-steam"></ion-icon>
+            </div>
 
+            <div class="navlinks ghanti">
+                <a href="#" class="navlink active ghanti">Loja</a>
+                <a href="#" class="navlink ghanti">Biblioteca</a>
+                <a href="#" class="navlink ghanti">Comunidade</a>
+                <a href="#" class="navlink ghanti">Ajuda</a>
+            </div>
+
+            <div class="nav-info ghanti">
+                <div class="notification ghanti">
+                    <div class="notBtn ghanti" href="#">
+                        <ion-icon name="notifications-outline" style="padding-top: 5px;"></ion-icon>
+                        <!--Number supports double digets and automaticly hides itself when there is nothing between divs -->
+
+                        <div class="box ghanti">
+                            <div class="display ghanti">
+                                <div class="nothing ghanti">
+                                    <i class="fas fa-child stick ghanti"></i>
+                                    <div class="cent ghanti">Looks Like your all caught up!</div>
+                                </div>
+                                {{#if event_data}}
+                                {{#if (notEmpty event_data.Events)}}
+                                <div class="cont ghanti">
+                                    <!-- Fold this div and try deleting evrything inbetween -->
+                                    {{#each event_data.Events}}
+                                    <div class="sec new ghanti">
+                                        <form action="/notif_clicked" method="get">
+                                            <input type="hidden" name="event" value="{{@key}}">
+                                            <div class="txt ghanti" onclick="this.parentNode.submit()"
+                                                style='padding-left:15%'>
+                                                There has been an Update
+                                                to event
+                                                {{this.name}}!!</div>
+                                            <div class="txt sub ghanti" onclick="this.parentNode.submit()">Edited on:
+                                                {{#formatTime
+                                                this.time
+                                                "YYYY-MM-DD"}}{{/formatTime}}</div>
+                                        </form>
+                                    </div>
+                                    {{/each}}
+                                </div>
+                                {{/if}}
+                                {{/if}}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <script type="module" src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js">
+                </script>
+                <script nomodule src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"></script>
+                <script src="../public/notif_js_css/notif.js"></script>
+                <div class="messages">
+
+                </div>
+
+                <div class="profile ghanti">
+                    <div class="user-img ghanti"></div>
+                    <ion-icon name="chevron-down-outline"></ion-icon>
+                </div>
+            </div>
+    </header>
     <div id="hs-feedback-fetcher" title="submit hubspot feedback">
         <iframe frameborder="0" title="Submit HubSpot product feedback"
             src="https://app.hubspot.com/feedback-web-fetcher"></iframe>
@@ -1789,6 +1859,7 @@
 
 
         </script>
+        <script>blink();</script>
 
         <script type="text/javascript"
             src="https://static.hsappstatic.net/MeetingsEmbed/ex/MeetingsEmbedCode.js"></script>

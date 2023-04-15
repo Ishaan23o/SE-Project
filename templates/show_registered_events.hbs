@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="../public/show_event.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-KK94CHFLLe+nY2dmCWGMq91rCGa5gtU4mk92HdvYe+M/SXH301p5ILy+dN9+nJOZ" crossorigin="anonymous">
+</head>
+
+<body>
+
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-ENjdO4Dr2bkBIFxQpeoTz1HIcje39Wm4jDKdf19U8gI4ddQ3GYNS7NTKfAdVQSZe"
+        crossorigin="anonymous"></script>
+    <h2>Events</h2>
+    <div class="table-wrapper">
+        <table class="table table-hover">
+            <thead>
+                <tr>
+                    <th>Event Name</th>
+                    <th>Registration Date</th>
+                    <th>Event Date</th>
+                    <th>Event Time</th>
+                    <th>Event Type</th>
+                    <th>Event Status</th>
+                    <th>Event Scope</th>
+                    <th>Event Code</th>
+                </tr>
+            </thead>
+            <tbody>
+                {{#data}}
+                <tr>
+                    <td>{{event_name}}</td>
+                    <td>{{date.registration}}</td>
+                    <td>{{date.event_date}}</td>
+                    <td>{{time}}</td>
+                    <td>{{type}}</td>
+                    <td>{{status}}</td>
+                    <td>{{scope.scope}}</td>
+                    <td><button type="button" value={{scope.code}} class="code_class btn btn-sm btn-outline btn-success"
+                            id=code-{{@index}} onclick="fun({{@index}})">Copy Code</button></td>
+                    <td>
+                        <form method='get' action='/find_event'><button type="submit" value={{scope.code}}
+                                class="code_class btn btn-sm btn-outline btn-success" name='ID'>View
+                                Me</button></form>
+                    </td>
+                </tr>
+                {{/data}}
+            </tbody>
+        </table>
+    </div>
+    <script defer>
+        function fun(a) {
+            let str = document.getElementById(`code-${a}`).value
+            navigator.clipboard.writeText(str);
+
+            document.execCommand("copy");
+            alert(`copied code`)
+        }
+    </script>
+
+</body>
+
+</html>

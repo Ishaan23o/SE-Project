@@ -1,5 +1,6 @@
 const event_collection = require("../models/events.model")
 const registration_collection = require("../models/registration.model")
+const notification_collection = require("../models/notification.model")
 const nodemailer = require("nodemailer");
 const mailgen = require("mailgen");
 
@@ -36,8 +37,22 @@ async function edited_event(req, res) {
     requirements: requirements,
     'scope.scope': req.body.event_scope
   }
+  if (req.body.notif) {
+    var x = {
+      time: (new Date()).toISOString(),
+      name: data.event_name
+    };
+    var y = `Events.${req.body.code}`;
+    var z = {};
+    z.email = cur_session;
+    z[y] = x;
+    await notification_collection.updateOne({ email: cur_session }, { "$set": z }, { upsert: true });
+  }
+
+
   let elem = await event_collection.findOneAndUpdate({ 'scope.code': req.body.code }, { $set: data });
-  res.render('index');
+  const event_notif = await notification_collection.findOne({ email: cur_session });
+  res.render("index", { event_data: event_notif })
 }
 
 

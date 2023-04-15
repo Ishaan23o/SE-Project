@@ -1,5 +1,6 @@
 const event_collection = require("../models/events.model")
 const registration_collection = require("../models/registration.model")
+const notification_collection = require("../models/notification.model")
 async function create_event(req, res) {
   let cur_status = ""
   let reg_Date = new Date(req.body.registration_date)
@@ -45,7 +46,8 @@ async function create_event(req, res) {
     }
   }
   await registration_collection.insertMany([registartion_data]);
-  res.render("index")
+  const event_notif = await notification_collection.findOne({ email: data.email });
+  res.render("index", { event_data: event_notif })
 };
 
 
@@ -68,7 +70,7 @@ async function show_event(req, res) {
   res.render("show_events", { data: find_elem })
 };
 async function find_event(req, res) {
-  let find_elem = await event_collection.find({"scope.scope":"public"});
+  let find_elem = await event_collection.find({ "scope.scope": "public" });
   let cur_date = new Date();
   cur_date.setHours(0, 0, 0, 0)
   for (var i = 0; i < find_elem.length; i++) {
@@ -82,29 +84,29 @@ async function find_event(req, res) {
     else
       element.status = "today"
   }
-  let cur_elem = await event_collection.find({ 'scope.code': req.query.ID});
-  var registered={};
-  registered[cur_session]=true;
-  var Event_ID=req.query.ID
-  var temp1={
-  Event_ID:Event_ID,
-  registered:registered
-};
-  let reg=await registration_collection.find(temp1).count();
-  if(reg)cur_elem[0].registered=true;
-  if(!cur_elem[0])cur_elem=[find_elem[0]];
-;  res.render("find_event", { data: find_elem, event_data: cur_elem });
+  let cur_elem = await event_collection.find({ 'scope.code': req.query.ID });
+  var registered = {};
+  registered[cur_session] = true;
+  var Event_ID = req.query.ID
+  var temp1 = {
+    Event_ID: Event_ID,
+    registered: registered
+  };
+  let reg = await registration_collection.find(temp1).count();
+  if (reg) cur_elem[0].registered = true;
+  if (!cur_elem[0]) cur_elem = [find_elem[0]];
+  ; res.render("find_event", { data: find_elem, event_data: cur_elem });
 };
 async function show_registered_event(req, res) {
- let registered={}
-  registered[cur_session]=true;
-  let x={registered}
+  let registered = {}
+  registered[cur_session] = true;
+  let x = { registered }
   var find_elem_temp = await registration_collection.find(x);
-   let ids=find_elem_temp.map((item)=>{
+  let ids = find_elem_temp.map((item) => {
     return item.Event_ID
-   })
+  })
 
-  var find_elem=await event_collection.find({"scope.code":{$in:ids}});
+  var find_elem = await event_collection.find({ "scope.code": { $in: ids } });
   console.log(find_elem);
   let cur_date = new Date();
   cur_date.setHours(0, 0, 0, 0)
@@ -119,12 +121,12 @@ async function show_registered_event(req, res) {
     else
       element.status = "today"
   }
-  res.render("show_events", { data: find_elem })
+  res.render("show_registered_events", { data: find_elem })
 
 };
 module.exports = {
   create_event,
   show_event,
   show_registered_event,
-  find_event, 
+  find_event,
 }
