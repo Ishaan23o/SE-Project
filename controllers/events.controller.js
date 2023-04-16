@@ -121,7 +121,13 @@ async function find_event(req, res) {
 async function show_registered_event(req, res) {
 
  let ids=await individual_registration_collection.findOne({'Email':cur_session})
+ if(!ids)
+{res.render("show_registered_events")
+}
+else
+{
 ids=ids.events;
+
 ids=ids.map((elem)=>elem.events);
   var find_elem = await event_collection.find({ "scope.code": { $in: ids } });
   console.log(find_elem);
@@ -139,7 +145,7 @@ ids=ids.map((elem)=>elem.events);
       element.status = "today"
   }
   res.render("show_registered_events", { data: find_elem })
-
+}
 };
 module.exports = {
   create_event,
