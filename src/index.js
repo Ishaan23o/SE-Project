@@ -40,7 +40,7 @@ app.get("/private_registration", (req, res) => {
 app.get("/find_event", event_controllers.find_event)
 app.get("/show_event", event_controllers.show_event)
 app.get("/show_registered_events", event_controllers.show_registered_event)
-app.post("/new_event", event_controllers.create_event)
+
 
 app.post("/register", registrations_controllers.register)
 app.post("/edit_event", registrations_controllers.edit_event)
@@ -73,4 +73,34 @@ hbs.handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
 hbs.handlebars.registerHelper('notEmpty', function (arg1) {
   if (arg1.length) return false;
   return Object.keys(arg1).length != 0;
+});
+hbs.handlebars.registerHelper( "when",function(operand_1, operator, operand_2, options) {
+  var operators = {
+   'eq': function(l,r) { return l == r; },
+   'noteq': function(l,r) { return l != r; },
+   'gt': function(l,r) { return Number(l) > Number(r); },
+   'or': function(l,r) { return l || r; },
+   'and': function(l,r) { return l && r; },
+   '%': function(l,r) { return (l % r) === 0; }
+  }
+  , result = operators[operator](operand_1,operand_2);
+
+  if (result) return options.fn(this);
+  else  return options.inverse(this);
+});
+hbs.handlebars.registerHelper('In', function(elem, list, options) {
+  console.log(elem);
+  let email_array=list.map((elements)=>(elements.email))
+  if(email_array.indexOf(elem) > -1) {
+    return options.fn(this);
+  }
+  return options.inverse(this);
+});
+hbs.handlebars.registerHelper('notIn', function(elem, list, options) {
+  console.log(elem);
+  let email_array=list.map((elements)=>(elements.email))
+  if(email_array.indexOf(elem) > -1) {
+    return options.inverse(this);
+  }
+  return options.fn(this);
 });

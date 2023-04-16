@@ -1,6 +1,7 @@
 const event_collection = require("../models/events.model")
 const registration_collection = require("../models/registration.model")
 const notification_collection = require("../models/notification.model")
+const individual_registration_collection = require("../models/individual_registrations.model")
 const nodemailer = require("nodemailer");
 const mailgen = require("mailgen");
 
@@ -58,12 +59,10 @@ async function edited_event(req, res) {
 
 async function register(req, res) {
   try {
-    let find_x = {};
-    find_x.registered = {};
-    find_x.registered[cur_session] = true;
-    await registration_collection.updateOne({ 'Event_ID': req.body.register }, find_x, { $upsert: false }, function (err, result) {
-      if (err) return res.send(500, { error: err });
-    });
+   cur_email={email:cur_session}
+   cur_event={events:req.body.register}
+    await registration_collection.findOneAndUpdate({ 'Event_ID': req.body.register }, {$push:{registered:cur_email}})
+    await individual_registration_collection.findOneAndUpdate({ 'Email': cur_session }, {$push:{events:cur_event}},{upsert:true})
     // let config={
     //   service:'gmail',
     //   auth:{
@@ -91,6 +90,11 @@ async function register(req, res) {
     //   html:mail
     // }
     // transporter.sendMail(message);
+    await event_collection.findOneAndUpdate({'scope.code': req.body.register} , {$inc : {'total_registrations' : 1}})
+    .then(()=>{console.log('ok')})
+    .catch(()=>{
+      console.log('ok')
+    })
     let find_elem = await event_collection.find({ "scope.scope": "public" });
     res.render("find_event", { data: find_elem });
   }

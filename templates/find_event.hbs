@@ -129,7 +129,10 @@
                   <div _ngcontent-d2c-frontend-c178="" class="register_sect ng-star-inserted">
                     <div _ngcontent-d2c-frontend-c178="" class="reg_fee ng-star-inserted">
                     </div>
-                    {{#if registered}}
+                    
+                  
+                 
+                    {{#In  ../cur_email  ../registered }}
                     <form action="/cancel_register" method="post">
                       <button name="register" _ngcontent-d2c-frontend-c178="" target="_blank"
                         class="cancel_register_btn cursor waves-effect ng-star-inserted" type="submit"
@@ -137,14 +140,26 @@
                         Cancel Registration
                       </button>
                     </form>
-                    {{else}}
+                    {{/In}}
+                    {{#notIn ../cur_email ../registered}}
+                    {{#when max_limit 'eq' total_registrations }}
+                    <form action="/waitlist" method="post">
+                      <button name="register" _ngcontent-d2c-frontend-c178="" target="_blank"
+                        class="register_btn cursor waves-effect ng-star-inserted" type="submit" value="{{scope.code}}">
+                        Get notified
+                      </button>
+                    </form>
+                    {{/when}}
+                    {{#when max_limit 'noteq' total_registrations }}
                     <form action="/register" method="post">
                       <button name="register" _ngcontent-d2c-frontend-c178="" target="_blank"
                         class="register_btn cursor waves-effect ng-star-inserted" type="submit" value="{{scope.code}}">
-                        Register
+                       Register
                       </button>
                     </form>
-                    {{/if}}
+                    {{/when}}
+                    {{/notIn}}
+                    
                   </div>
                 </div>
                 <div _ngcontent-d2c-frontend-c178="" class="r_box ng-star-inserted">
