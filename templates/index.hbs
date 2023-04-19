@@ -416,14 +416,12 @@
             <div class="logo ghanti">
                 <ion-icon name="logo-steam"></ion-icon>
             </div>
-
             <div class="navlinks ghanti">
                 <a href="#" class="navlink active ghanti">Loja</a>
                 <a href="#" class="navlink ghanti">Biblioteca</a>
                 <a href="#" class="navlink ghanti">Comunidade</a>
                 <a href="#" class="navlink ghanti">Ajuda</a>
             </div>
-
             <div class="nav-info ghanti">
                 <div class="notification ghanti">
                     <div class="notBtn ghanti" href="#">
@@ -436,9 +434,25 @@
                                     <i class="fas fa-child stick ghanti"></i>
                                     <div class="cent ghanti">Looks Like your all caught up!</div>
                                 </div>
+
                                 {{#if event_data}}
-                                {{#if (notEmpty event_data.Events)}}
                                 <div class="cont ghanti">
+                                    {{#if (notEmpty event_data.waitlist)}}
+
+                                    <!-- Fold this div and try deleting evrything inbetween -->
+                                    {{#each event_data.waitlist}}
+                                    <div class="sec new ghanti">
+                                        <form action="/waitlist_clicked" method="get">
+                                            <input type="hidden" name="event" value="{{this.code}}">
+                                            <div class="txt ghanti" onclick="this.parentNode.submit()"
+                                                style='padding-left:15%'>
+                                                Now you can register for
+                                                {{this.name}}!!</div>
+                                        </form>
+                                    </div>
+                                    {{/each}}
+                                    {{/if}}
+                                    {{#if (notEmpty event_data.Events)}}
                                     <!-- Fold this div and try deleting evrything inbetween -->
                                     {{#each event_data.Events}}
                                     <div class="sec new ghanti">
@@ -456,8 +470,8 @@
                                         </form>
                                     </div>
                                     {{/each}}
+                                    {{/if}}
                                 </div>
-                                {{/if}}
                                 {{/if}}
                             </div>
                         </div>
@@ -856,6 +870,13 @@
 
                                 <div class="book-demo-cta-text-header">search for event</div>
                             </a>
+                            <form action='/give_feedback_app' method='post'><button
+                                    class="book-demo-cta-header w-inline-block"
+                                    style="padding-left: 20px; padding-right:20px; margin-left: 20px;" type='submit'>
+
+                                    <div class="book-demo-cta-text-header">Give Feedback</div>
+
+                            </form>
 
                         </div>
                         {{!--

@@ -10,6 +10,12 @@ async function clicked_notif(req, res) {
     await notification_collection.updateOne({ email: cur_session }, { $unset: x });
     res.redirect(`/find_event?ID=${req.query.event}`);
 }
+
+async function waitlist_clicked(req, res) {
+    res.redirect(`/find_event?ID=${req.query.event}`);
+}
+
 module.exports = {
-    clicked_notif
+    clicked_notif,
+    waitlist_clicked
 }

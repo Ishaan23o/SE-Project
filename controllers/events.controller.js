@@ -1,9 +1,10 @@
 const event_collection = require("../models/events.model")
 const registration_collection = require("../models/registration.model")
 const individual_registration_collection = require("../models/individual_registrations.model")
-const fs=require('fs')
+const signup = require("../models/signup.model")
+const fs = require('fs')
 const path = require("path")
-const btoa=require("btoa")
+const btoa = require("btoa")
 const notification_collection = require("../models/notification.model")
 async function create_event(req, res) {
   let cur_status = ""
@@ -32,12 +33,12 @@ async function create_event(req, res) {
     contact: contact,
     requirements: requirements,
     scope: scope,
-    max_limit:req.body.max_participants,
-    event_registrations:0,
+    max_limit: req.body.max_participants,
+    event_registrations: 0,
     image: {
-      data: btoa(fs.readFileSync(path.join(__dirname , '..','public' ,'images', req.file.filename))),
+      data: btoa(fs.readFileSync(path.join(__dirname, '..', 'public', 'images', req.file.filename))),
       contentType: 'image/png'
-  }
+    }
   }
   var id = require("crypto").randomBytes(64).toString('hex');
   let find_code = await event_collection.find({ "scope.code": id }).count();
@@ -67,15 +68,14 @@ async function show_event(req, res) {
   let cur_date = new Date();
   cur_date.setHours(0, 0, 0, 0)
   for (var i = 0; i < find_elem.length; i++) {
-    var element = find_elem[i];
-    let req_date = new Date(element.date)
+    let req_date = new Date(find_elem[i].date.event_date)
     req_date.setHours(0, 0, 0, 0)
     if (req_date > cur_date)
-      element.status = "upcoming"
+      find_elem[i].status = "upcoming"
     else if (req_date < cur_date)
-      element.status = "expired"
+      find_elem[i].status = "expired"
     else
-      element.status = "today"
+      find_elem[i].status = "today"
   }
   res.render("show_events", { data: find_elem })
 };
@@ -105,51 +105,76 @@ async function find_event(req, res) {
   // };
   // let reg = await registration_collection.find(temp1).count();
   // if (reg) cur_elem[0].registered = true;
-  if (!cur_elem){ cur_elem = [find_elem[0]];
+  if (!cur_elem) {
+    cur_elem = [find_elem[0]];
 
-  let reg_list = await registration_collection.find({ 'Event_ID': cur_elem[0].scope.code });
+    let reg_list = await registration_collection.find({ 'Event_ID': cur_elem[0].scope.code });
 
 
-  ; res.render("find_event", { data: find_elem, event_data: cur_elem,cur_email:cur_session,registered:reg_list[0].registered });}
-  else{
+    ; res.render("find_event", { data: find_elem, event_data: cur_elem, cur_email: cur_session, registered: reg_list[0].registered });
+  }
+  else {
     let reg_list = await registration_collection.find({ 'Event_ID': cur_elem.scope.code });
 
 
-    ; res.render("find_event", { data: find_elem, event_data: cur_elem,cur_email:cur_session,registered:reg_list[0].registered });}
+    ; res.render("find_event", { data: find_elem, event_data: cur_elem, cur_email: cur_session, registered: reg_list[0].registered });
   }
+}
 ;
+
+
+
+async function get_list(req, res) {
+  let attendee = await registration_collection.findOne({ 'Event_ID': req.body.attendee });
+  var x = [];
+  for (var k = 1; k < attendee.registered.length; k++) {
+    var temp2 = await signup.findOne({ 'email': attendee.registered[k].email });
+    x.push(temp2);
+  }
+  res.render('get_list', {
+    attendee: x.map((temp) => {
+      var temp_child = {};
+      temp_child.name = temp.name;
+      temp_child.email = temp.email;
+      temp_child.organisation = temp.organisation;
+      return temp_child;
+    })
+  });
+}
+
+
+
+
 async function show_registered_event(req, res) {
 
- let ids=await individual_registration_collection.findOne({'Email':cur_session})
- if(!ids)
-{res.render("show_registered_events")
-}
-else
-{
-ids=ids.events;
-
-ids=ids.map((elem)=>elem.events);
-  var find_elem = await event_collection.find({ "scope.code": { $in: ids } });
-  console.log(find_elem);
-  let cur_date = new Date();
-  cur_date.setHours(0, 0, 0, 0)
-  for (var i = 0; i < find_elem.length; i++) {
-    var element = find_elem[i];
-    let req_date = new Date(element.date)
-    req_date.setHours(0, 0, 0, 0)
-    if (req_date > cur_date)
-      element.status = "upcoming"
-    else if (req_date < cur_date)
-      element.status = "expired"
-    else
-      element.status = "today"
+  let ids = await individual_registration_collection.findOne({ 'Email': cur_session })
+  if (!ids) {
+    res.render("show_registered_events")
   }
-  res.render("show_registered_events", { data: find_elem })
-}
+  else {
+    ids = ids.events;
+
+    ids = ids.map((elem) => elem.events);
+    var find_elem = await event_collection.find({ "scope.code": { $in: ids } });
+    let cur_date = new Date();
+    cur_date.setHours(0, 0, 0, 0)
+    for (var i = 0; i < find_elem.length; i++) {
+      let req_date = new Date(find_elem[i].date.event_date)
+      req_date.setHours(0, 0, 0, 0)
+      if (req_date > cur_date)
+        find_elem[i].status = "upcoming"
+      else if (req_date < cur_date)
+        find_elem[i].status = "expired"
+      else
+        find_elem[i].status = "today"
+    }
+    res.render("show_registered_events", { data: find_elem })
+  }
 };
 module.exports = {
   create_event,
   show_event,
   show_registered_event,
   find_event,
+  get_list
 }

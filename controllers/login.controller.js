@@ -1,5 +1,6 @@
 const signup_collection = require("../models/signup.model")
 const notification_collection = require("../models/notification.model")
+const event_collection = require("../models/events.model")
 async function signup(req, res) {
   const data = {
     name: req.body.signup_name,
@@ -22,12 +23,25 @@ async function login(req, res) {
     const event_notif = await notification_collection.findOne({ email: data.email });
     if (check.password === data.password) {
       cur_session = data.email
+      if ((event_notif !== null) && event_notif.waitlist) {
+        for (var k in event_notif.waitlist) {
+          event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
+            .then((temp1) => {
+              if (temp1.max_limit > temp1.total_registrations) return { name: temp1.event_name, code: temp1.scope.code };
+              else return 'null';
+            })
+        };
+        event_notif.waitlist = event_notif.waitlist.filter((temp) => {
+          return temp != 'null';
+        })
+      }
       res.render("index", { event_data: event_notif })
     }
     else
       res.send("wrong password")
   }
-  catch {
+  catch (err) {
+    console.log(err);
     res.send("wrong credentials")
   }
 };

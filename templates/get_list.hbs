@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        h2 {
+            text-transform: capitalize;
+            text-align: center;
+        }
+
+        table {
+            width: 700px;
+            margin: 20px auto;
+            background-color: #eeeeee;
+        }
+
+        table,
+        th,
+        td {
+            border: 1px solid white;
+            border-collapse: collapse;
+            padding: 15px;
+            text-align: center;
+            text-transform: capitalize;
+            font-size: 20px;
+        }
+
+        table thead th {
+            background-color: #404040;
+            color: white;
+        }
+
+        img {
+            border: 1px solid #b7b6b6;
+        }
+
+        button {
+            font-size: 18px;
+            padding: 8px;
+            text-transform: capitalize;
+            border-radius: 5px;
+            border: none;
+            cursor: pointer;
+            -webkit-border-radius: 5px;
+            -moz-border-radius: 5px;
+            -ms-border-radius: 5px;
+            -o-border-radius: 5px;
+        }
+
+        .button_one {
+            background: #03a9f4;
+            color: white;
+        }
+
+        .button_two {
+            background: #e91e63;
+            color: white;
+        }
+
+        .bottom {
+            border-bottom: 2px solid #009688;
+        }
+    </style>
+    <title>Document</title>
+</head>
+
+<body>
+    <script src="https://www.kryogenix.org/code/browser/sorttable/sorttable.js"></script>
+    <h2>Attendee List</h2>
+    <table class='sortable'>
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Email</th>
+                <th>Organisation</th>
+                <th>Feedback</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            {{#attendee}}
+            <tr class='item'>
+                <td>{{this.name}}</td>
+                <td>{{this.email}}</td>
+                <td>{{this.organisation}}</td>
+                <td>
+                    <button class="button_one">View Feedback</button>
+                </td>
+            </tr>
+            {{/attendee}}
+        </tbody>
+    </table>
+</body>
+
+</html>

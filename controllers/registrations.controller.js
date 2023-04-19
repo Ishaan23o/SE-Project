@@ -9,6 +9,11 @@ async function edit_event(req, res) {
   let elem = await event_collection.findOne({ 'scope.code': req.body.Edit });
   res.render('edit_event', { data: elem });
 }
+async function waitlist(req, res) {
+  await notification_collection.findOneAndUpdate({ email: cur_session }, { $push: { waitlist: req.body.register } }, { upsert: true })
+  let find_elem = await event_collection.find({ "scope.scope": "public" });
+  res.render("find_event", { data: find_elem });
+}
 
 async function delete_event(req, res) {
   await event_collection.findOneAndDelete({ 'scope.code': req.body.Edit });
@@ -59,10 +64,15 @@ async function edited_event(req, res) {
 
 async function register(req, res) {
   try {
-   cur_email={email:cur_session}
-   cur_event={events:req.body.register}
-    await registration_collection.findOneAndUpdate({ 'Event_ID': req.body.register }, {$push:{registered:cur_email}})
-    await individual_registration_collection.findOneAndUpdate({ 'Email': cur_session }, {$push:{events:cur_event}},{upsert:true})
+    cur_email = { email: cur_session }
+    cur_event = { events: req.body.register }
+    let curr = registration_collection.findOne({ 'Event_ID': req.body.register });
+    if (curr.total_registrations >= curr.max_limit) {
+      res.render('try later');
+      return;
+    }
+    await registration_collection.findOneAndUpdate({ 'Event_ID': req.body.register }, { $push: { registered: cur_email } })
+    await individual_registration_collection.findOneAndUpdate({ 'Email': cur_session }, { $push: { events: cur_event } }, { upsert: true })
     // let config={
     //   service:'gmail',
     //   auth:{
@@ -90,11 +100,12 @@ async function register(req, res) {
     //   html:mail
     // }
     // transporter.sendMail(message);
-    await event_collection.findOneAndUpdate({'scope.code': req.body.register} , {$inc : {'total_registrations' : 1}})
-    .then(()=>{console.log('ok')})
-    .catch(()=>{
-      console.log('ok')
-    })
+    await event_collection.findOneAndUpdate({ 'scope.code': req.body.register }, { $inc: { 'total_registrations': 1 } })
+      .then(() => { console.log('ok') })
+      .catch(() => {
+        console.log('ok')
+      })
+    await notification_collection.updateOne({ email: cur_session }, { $pull: { waitlist: req.body.register } });
     let find_elem = await event_collection.find({ "scope.scope": "public" });
     res.render("find_event", { data: find_elem });
   }
@@ -105,5 +116,5 @@ async function register(req, res) {
 module.exports = {
   register,
   edit_event,
-  edited_event, delete_event
+  edited_event, delete_event, waitlist
 }

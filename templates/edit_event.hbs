@@ -311,7 +311,7 @@
                                     delbutton.textContent = 'delete contact';
                                     delbutton.addEventListener('click', () => {
                                         var id = delbutton.id.substr(8);
-                                        console.log(id);
+
                                         req.removeChild(document.getElementById('con_div' + id));
                                         req.removeChild(document.getElementById('del_con-' + id));
                                         req.removeChild(document.getElementById('br_con-' + id));
