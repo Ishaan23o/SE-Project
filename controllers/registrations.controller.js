@@ -113,8 +113,18 @@ async function register(req, res) {
     res.send("wrong code");
   }
 };
+async function cancel_registration(req,res)
+{
+  console.log(req.body.cancel_register);
+await individual_registration_collection.updateOne({'Email':cur_session},{$pull:{'events':{'events':req.body.cancel_register}}})
+await registration_collection.updateOne({'Event_ID':req.body.cancel_register},{$pull:{'registered':{'email':cur_session}}})
+await event_collection.findOneAndUpdate({ 'scope.code': req.body.cancel_register }, { $inc: { 'total_registrations': -1 } })
+let find_elem = await event_collection.find({ "scope.scope": "public" });
+res.render("find_event", { data: find_elem });
+}
 module.exports = {
   register,
   edit_event,
-  edited_event, delete_event, waitlist
+  edited_event, delete_event, waitlist,
+  cancel_registration
 }

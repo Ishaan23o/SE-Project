@@ -45,6 +45,7 @@ app.post("/get_list", event_controllers.get_list)
 
 
 app.post("/register", registrations_controllers.register)
+app.post("/cancel_register", registrations_controllers.cancel_registration)
 app.post("/waitlist", registrations_controllers.waitlist)
 app.post("/edit_event", registrations_controllers.edit_event)
 app.post("/edited_event", registrations_controllers.edited_event)
