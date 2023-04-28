@@ -23,7 +23,7 @@ async function create_event(req, res) {
     code: "PUBLIC"
   }
   let data = {
-    email: cur_session,
+    email: req.session.user,
     event_name: req.body.event_name,
     date: date,
     time: req.body.event_time,
@@ -64,7 +64,7 @@ async function create_event(req, res) {
 
 
 async function show_event(req, res) {
-  let find_elem = await event_collection.find({ email: cur_session });
+  let find_elem = await event_collection.find({ email: req.session.user });
   let cur_date = new Date();
   cur_date.setHours(0, 0, 0, 0)
   for (var i = 0; i < find_elem.length; i++) {
@@ -97,7 +97,7 @@ async function find_event(req, res) {
   let cur_elem = await event_collection.findOne({ 'scope.code': req.query.ID });
   console.log(cur_elem)
   // var registered = {};
-  // registered[cur_session] = true;
+  // registered[req.session.user] = true;
   // var Event_ID = req.query.ID
   // var temp1 = {
   //   Event_ID: Event_ID,
@@ -111,13 +111,13 @@ async function find_event(req, res) {
     let reg_list = await registration_collection.find({ 'Event_ID': cur_elem[0].scope.code });
 
 
-    ; res.render("find_event", { data: find_elem, event_data: cur_elem, cur_email: cur_session, registered: reg_list[0].registered });
+    ; res.render("find_event", { data: find_elem, event_data: cur_elem, cur_email: req.session.user, registered: reg_list[0].registered });
   }
   else {
     let reg_list = await registration_collection.find({ 'Event_ID': cur_elem.scope.code });
 
 
-    ; res.render("find_event", { data: find_elem, event_data: cur_elem, cur_email: cur_session, registered: reg_list[0].registered });
+    ; res.render("find_event", { data: find_elem, event_data: cur_elem, cur_email: req.session.user, registered: reg_list[0].registered });
   }
 }
 ;
@@ -147,7 +147,7 @@ async function get_list(req, res) {
 
 async function show_registered_event(req, res) {
 
-  let ids = await individual_registration_collection.findOne({ 'Email': cur_session })
+  let ids = await individual_registration_collection.findOne({ 'Email':req.session.user })
   if (!ids) {
     res.render("show_registered_events")
   }

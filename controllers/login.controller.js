@@ -14,6 +14,7 @@ async function signup(req, res) {
 };
 
 async function login(req, res) {
+  console.log(req.session)
   const data = {
     email: req.body.login_email,
     password: req.body.login_password
@@ -22,7 +23,9 @@ async function login(req, res) {
     const check = await signup_collection.findOne({ email: data.email })
     const event_notif = await notification_collection.findOne({ email: data.email });
     if (check.password === data.password) {
-      cur_session = data.email
+      req.session.isAuth=true
+      req.session.user=data.email;
+      console.log(req.session.user)
       if ((event_notif !== null) && event_notif.waitlist) {
         for (var k in event_notif.waitlist) {
           event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })

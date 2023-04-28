@@ -10,6 +10,10 @@ const registrations_controllers = require("../controllers/registrations.controll
 const notification_controllers = require("../controllers/notifications.controller")
 const feedback_controllers = require("../controllers/feedback.controller")
 const templates_path = path.join(__dirname, '../templates')
+const session=require("express-session")
+const MongoDbSession=require('connect-mongodb-session')(session);
+const mongoose=require('mongoose')
+const mongoURI="mongodb://127.0.0.1:27017/se_project"
 const multer = require('multer')
 let storage = multer.diskStorage({
   destination: 'public/images/',
@@ -20,6 +24,19 @@ let storage = multer.diskStorage({
 let upload = multer({
   storage: storage
 })
+mongoose.connect(mongoURI).then(()=>{
+  console.log("connection established");
+})
+const store=new MongoDbSession({
+  uri:mongoURI,
+  collection:"sessions",
+})
+app.use(session({
+  secret: "this is a secret key",
+  resave:false,
+  saveUninitialized:false,
+  store:store
+}))
 app.use(express.json())
 app.set("view engine", "hbs")
 app.set("views", templates_path)
@@ -27,20 +44,28 @@ app.use(express.urlencoded({ extended: false }))
 app.use("/public", express.static("public"))
 num_req = 1;
 num_con = 1;
+const isAuth=(req,res,next)=>{
+  if(req.session.isAuth)
+  {
+    next()
+  }
+  else
+  res.render("login")
+}
 app.get("/", (req, res) => {
   res.render("login")
 })
-app.get("/new_event", (req, res) => {
+app.get("/new_event",isAuth, (req, res) => {
   res.render("create_event")
 })
-app.get("/private_registration", (req, res) => {
+app.get("/private_registration",isAuth, (req, res) => {
   res.render("private_registration")
 })
 
 
-app.get("/find_event", event_controllers.find_event)
-app.get("/show_event", event_controllers.show_event)
-app.get("/show_registered_events", event_controllers.show_registered_event)
+app.get("/find_event",isAuth, event_controllers.find_event)
+app.get("/show_event",isAuth, event_controllers.show_event)
+app.get("/show_registered_events",isAuth, event_controllers.show_registered_event)
 app.post("/get_list", event_controllers.get_list)
 
 
@@ -52,7 +77,7 @@ app.post("/edited_event", registrations_controllers.edited_event)
 app.post("/delete_event", registrations_controllers.delete_event)
 
 app.post("/signup", login_controllers.signup)
-app.post("/new_event", upload.single('brochure'), event_controllers.create_event)
+app.post("/new_event",upload.single('brochure'), event_controllers.create_event)
 app.post("/login", login_controllers.login)
 
 app.post("/give_feedback_app", feedback_controllers.give_feedback_app)

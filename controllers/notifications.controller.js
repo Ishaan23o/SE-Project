@@ -7,7 +7,7 @@ async function clicked_notif(req, res) {
     console.log(str);
     var x = {};
     x[str] = true;
-    await notification_collection.updateOne({ email: cur_session }, { $unset: x });
+    await notification_collection.updateOne({ email: req.session.user }, { $unset: x });
     res.redirect(`/find_event?ID=${req.query.event}`);
 }
 
