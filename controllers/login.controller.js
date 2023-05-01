@@ -1,11 +1,13 @@
 const signup_collection = require("../models/signup.model")
 const notification_collection = require("../models/notification.model")
 const event_collection = require("../models/events.model")
+const bcrypt=require("bcryptjs")
 async function signup(req, res) {
+  let hash_password=await bcrypt.hash(req.body.signup_password,12);
   const data = {
     name: req.body.signup_name,
     email: req.body.signup_email,
-    password: req.body.signup_password,
+    password: hash_password,
     contact: req.body.signup_contact,
     organisation: req.body.signup_organisation
   }
@@ -22,7 +24,9 @@ async function login(req, res) {
   try {
     const check = await signup_collection.findOne({ email: data.email })
     const event_notif = await notification_collection.findOne({ email: data.email });
-    if (check.password === data.password) {
+ 
+    const isMatch=bcrypt.compareSync(data.password,check.password)
+    if (isMatch) {
       req.session.isAuth=true
       req.session.user=data.email;
       console.log(req.session.user)
@@ -48,7 +52,18 @@ async function login(req, res) {
     res.send("wrong credentials")
   }
 };
+async function logout(req,res)
+{
+  req.session.destroy((err)=>{
+    if(err)
+    throw err;
+    else
+    res.render("login");
+  })
+}
 module.exports = {
   signup,
   login,
+  logout,
+ 
 }

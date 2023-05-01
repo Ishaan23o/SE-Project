@@ -9,6 +9,9 @@ const login_controllers = require("../controllers/login.controller")
 const registrations_controllers = require("../controllers/registrations.controller")
 const notification_controllers = require("../controllers/notifications.controller")
 const feedback_controllers = require("../controllers/feedback.controller")
+const signup_collection = require("../models/signup.model")
+const notification_collection = require("../models/notification.model")
+const event_collection = require("../models/events.model")
 const templates_path = path.join(__dirname, '../templates')
 const session=require("express-session")
 const MongoDbSession=require('connect-mongodb-session')(session);
@@ -53,6 +56,34 @@ const isAuth=(req,res,next)=>{
   res.render("login")
 }
 app.get("/", (req, res) => {
+  if(req.session.isAuth)
+  {
+    async function login_2() {
+      console.log("yo");
+      console.log(req.session)
+      const data = {
+        email: req.session.user,
+      }
+     
+        const check = await signup_collection.findOne({ email: data.email })
+        const event_notif = await notification_collection.findOne({ email: data.email });
+          if ((event_notif !== null) && event_notif.waitlist) {
+            for (var k in event_notif.waitlist) {
+              event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
+                .then((temp1) => {
+                  if (temp1.max_limit > temp1.total_registrations) return { name: temp1.event_name, code: temp1.scope.code };
+                  else return 'null';
+                })
+            };
+            event_notif.waitlist = event_notif.waitlist.filter((temp) => {
+              return temp != 'null';
+            })
+          }
+          res.render("index", { event_data: event_notif })
+    };
+  login_2();
+  }
+  else
   res.render("login")
 })
 app.get("/new_event",isAuth, (req, res) => {
@@ -79,7 +110,7 @@ app.post("/delete_event", registrations_controllers.delete_event)
 app.post("/signup", login_controllers.signup)
 app.post("/new_event",upload.single('brochure'), event_controllers.create_event)
 app.post("/login", login_controllers.login)
-
+app.get("/logout", login_controllers.logout)
 app.post("/give_feedback_app", feedback_controllers.give_feedback_app)
 app.post("/feedback_submitted", feedback_controllers.feedback_submitted)
 
