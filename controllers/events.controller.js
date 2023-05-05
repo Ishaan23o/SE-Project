@@ -75,6 +75,7 @@ async function create_event(req, res) {
     event_notif.waitlist = event_notif.waitlist.filter((temp) => {
       return temp != 'null';
     })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
   }
   res.render("index", { event_data: event_notif, image: req.session.profile.profile_image })
 };
@@ -107,6 +108,7 @@ async function show_event(req, res) {
     event_notif.waitlist = event_notif.waitlist.filter((temp) => {
       return temp != 'null';
     })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
   }
   res.render("show_events", { data: find_elem, event_data: event_notif, image: req.session.profile.profile_image })
 };
@@ -157,6 +159,7 @@ async function find_event(req, res) {
     event_notif.waitlist = event_notif.waitlist.filter((temp) => {
       return temp != 'null';
     })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
   }
   res.render("find_event", { data: find_elem, event_data: cur_elem, cur_email: req.session.user, registered: reg_list[0].registered, event_datas: event_notif, image: req.session.profile.profile_image });
 }
@@ -183,6 +186,7 @@ async function get_list(req, res) {
     event_notif.waitlist = event_notif.waitlist.filter((temp) => {
       return temp != 'null';
     })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
   }
   res.render('get_list', {
     attendee: x.map((temp) => {
@@ -210,6 +214,7 @@ async function get_feedback(req, res) {
     event_notif.waitlist = event_notif.waitlist.filter((temp) => {
       return temp != 'null';
     })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
   }
   res.render('give_event_feedback', { email: req.session.user, event: req.body.event, event_data: event_notif, image: req.session.profile.profile_image });
 }
@@ -252,6 +257,7 @@ async function show_registered_event(req, res) {
       event_notif.waitlist = event_notif.waitlist.filter((temp) => {
         return temp != 'null';
       })
+      if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
     }
     res.render("show_registered_events", { data: find_elem, event_data: event_notif, image: req.session.profile.profile_image })
   }

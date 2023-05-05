@@ -347,18 +347,22 @@
 
                 <tr style="background-color: beige; ">
                     <td style="color:#740f5c; font-weight:bold; font-size:19px">{{event_name}}</td>
-                    <td style="color:#740f5c; font-weight:bold;font-size:18px">{{formatTime date.registration "MM-DD-YYYY"}}</td>
-                    <td style="color:#740f5c; font-weight:bold;font-size:18px">{{formatTime date.event_date "MM-DD-YYYY"}}</td>
+                    <td style="color:#740f5c; font-weight:bold;font-size:18px">{{formatTime date.registration
+                        "MM-DD-YYYY"}}</td>
+                    <td style="color:#740f5c; font-weight:bold;font-size:18px">{{formatTime date.event_date
+                        "MM-DD-YYYY"}}</td>
                     <td style="color:#740f5c; font-weight:bold;font-size:18px">{{time}}</td>
                     <td style="color:#740f5c; font-weight:bold;font-size:18px">{{type}}</td>
                     <td style="color:#740f5c; font-weight:bold;font-size:18px">{{status}}</td>
                     <td style="color:#740f5c; font-weight:bold;font-size:18px">{{scope.scope}}</td>
-                    <td><button type="button" value={{scope.code}} class="code_class btn btn-sm btn-outline btn-success" style="height: 30px; width:70px"
-                            id=code-{{@index}} onclick="fun({{@index}})"><span style="font-size:larger; font-weight:bold"> Copy Code</span></button></td>
+                    <td><button type="button" value={{scope.code}} class="code_class btn btn-sm btn-outline btn-success"
+                            style="height: 30px; width:70px" id=code-{{@index}} onclick="fun({{@index}})"><span
+                                style="font-size:larger; font-weight:bold"> Copy Code</span></button></td>
                     <td>
-                        <form method='get' action='/find_event'><button type="submit" value={{scope.code}} style="height: 30px; width:70px"
-                                class="code_class btn btn-sm btn-outline btn-success" name='ID'><span style="font-size:larger; font-weight:bold"> View Me</span>
-                                </button></form>
+                        <form method='get' action='/find_event'><button type="submit" value={{scope.code}}
+                                style="height: 30px; width:70px" class="code_class btn btn-sm btn-outline btn-success"
+                                name='ID'><span style="font-size:larger; font-weight:bold"> View Me</span>
+                            </button></form>
                     </td>
                 </tr>
                 {{/data}}

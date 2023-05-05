@@ -65,7 +65,7 @@ app.get("/", (req, res) => {
 
       const check = await signup_collection.findOne({ email: data.email })
       const event_notif = await notification_collection.findOne({ email: data.email });
-      if ((event_notif !== null) && event_notif.waitlist) {
+      if (event_notif && event_notif.waitlist) {
         for (var k in event_notif.waitlist) {
           event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
             .then((temp1) => {
@@ -76,8 +76,9 @@ app.get("/", (req, res) => {
         event_notif.waitlist = event_notif.waitlist.filter((temp) => {
           return temp != 'null';
         })
+        if (event_notif.waitlist.length == 0) event_notif.waitlist = null;
       }
-      res.render("landing_page", { event_data: event_notif })
+      res.render("landing_page", { event_data: event_notif, image: req.session.profile.profile_image })
     };
     login_2();
   }
@@ -97,6 +98,7 @@ app.get("/new_event", isAuth, async (req, res) => {
     event_notif.waitlist = event_notif.waitlist.filter((temp) => {
       return temp != 'null';
     })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
   }
   res.render("create_event", { event_data: event_notif, image: req.session.profile.profile_image })
 })
@@ -125,9 +127,12 @@ app.post("/new_event", upload.single('brochure'), event_controllers.create_event
 app.post("/login", login_controllers.login)
 app.get("/reg-ticket", login_controllers.index)
 app.get("/logout", login_controllers.logout)
+
+
 app.get("/give_feedback_app", feedback_controllers.give_feedback_app)
 app.post("/feedback_submitted", feedback_controllers.feedback_submitted)
 app.post("/given_feedback", feedback_controllers.event_feedback_submitted)
+app.post("/eventFeedback", feedback_controllers.seeEventFeedback);
 
 app.get("/profile", async (req, res) => {
   const event_notif = await notification_collection.findOne({ email: req.session.user });
@@ -142,6 +147,7 @@ app.get("/profile", async (req, res) => {
     event_notif.waitlist = event_notif.waitlist.filter((temp) => {
       return temp != 'null';
     })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
   }
   res.render('profile', { event_data: event_notif, image: req.session.profile.profile_image, user: req.session.profile });
 })
@@ -167,6 +173,7 @@ hbs.handlebars.registerHelper('ifEquals', function (arg1, arg2, options) {
 });
 
 hbs.handlebars.registerHelper('notEmpty', function (arg1) {
+  if (!arg1) return false;
   if (arg1.length) return true;
   return Object.keys(arg1).length != 0;
 });
