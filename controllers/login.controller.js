@@ -38,33 +38,33 @@ async function signup(req, res) {
   else{
   await otp_collection.insertMany([data])
  
-  // let config={
-  //   service:'gmail',
-  //   auth:{
-  //     user:'prathambhatia8686@gmail.com',
-  //     pass:'urgcylkulebavygd'
-  //   }
-  // }
-  // let transporter=nodemailer.createTransport(config);
-  // let mail_generator=new mailgen({
-  //   theme:"default",
-  //   product:{
-  //     name: "Mailgen",
-  //     link:'https://mailgen.js'
-  //   }
-  // })
-  // let response={
-  //   body:{
-  //     intro:"O                                                                                                                                                                                                                                                                                                                                                                                                                                    TP for signup is "+otp,
-  //   }
-  // }
-  // let mail=mail_generator.generate(response)
-  // let message={
-  //   from:'prathambhatia8686@gmail.com',
-  //   to:data.email,
-  //   html:mail
-  // }
-  // transporter.sendMail(message);
+  let config={
+    service:'gmail',
+    auth:{
+      user:'prathambhatia8686@gmail.com',
+      pass:'urgcylkulebavygd'
+    }
+  }
+  let transporter=nodemailer.createTransport(config);
+  let mail_generator=new mailgen({
+    theme:"default",
+    product:{
+      name: "Mailgen",
+      link:'https://mailgen.js'
+    }
+  })
+  let response={
+    body:{
+      intro:"O                                                                                                                                                                                                                                                                                                                                                                                                                                    TP for signup is "+otp,
+    }
+  }
+  let mail=mail_generator.generate(response)
+  let message={
+    from:'prathambhatia8686@gmail.com',
+    to:data.email,
+    html:mail
+  }
+  transporter.sendMail(message);
   res.render("otp",{email:data.email});
   }
 

@@ -115,33 +115,33 @@ async function register(req, res) {
     }
     await registration_collection.findOneAndUpdate({ 'Event_ID': req.body.register }, { $push: { registered: cur_email } })
     await individual_registration_collection.findOneAndUpdate({ 'Email': req.session.user }, { $push: { events: cur_event } }, { upsert: true })
-    // let config={
-    //   service:'gmail',
-    //   auth:{
-    //     user:'prathambhatia8686@gmail.com',
-    //     pass:'urgcylkulebavygd'
-    //   }
-    // }
-    // let transporter=nodemailer.createTransport(config);
-    // let mail_generator=new mailgen({
-    //   theme:"default",
-    //   product:{
-    //     name: "Mailgen",
-    //     link:'https://mailgen.js'
-    //   }
-    // })
-    // let response={
-    //   body:{
-    //     intro:"you have successfully registered",
-    //   }
-    // }
-    // let mail=mail_generator.generate(response)
-    // let message={
-    //   from:'prathambhatia8686@gmail.com',
-    //   to:req.session.user,
-    //   html:mail
-    // }
-    // transporter.sendMail(message);
+    let config={
+      service:'gmail',
+      auth:{
+        user:'prathambhatia8686@gmail.com',
+        pass:'urgcylkulebavygd'
+      }
+    }
+    let transporter=nodemailer.createTransport(config);
+    let mail_generator=new mailgen({
+      theme:"default",
+      product:{
+        name: "Mailgen",
+        link:'https://mailgen.js'
+      }
+    })
+    let response={
+      body:{
+        intro:"you have successfully registered",
+      }
+    }
+    let mail=mail_generator.generate(response)
+    let message={
+      from:'prathambhatia8686@gmail.com',
+      to:req.session.user,
+      html:mail
+    }
+    transporter.sendMail(message);
     await event_collection.findOneAndUpdate({ 'scope.code': req.body.register }, { $inc: { 'total_registrations': 1 } })
       .then(() => { console.log('ok') })
       .catch(() => {

@@ -17,7 +17,7 @@ const templates_path = path.join(__dirname, '../templates')
 const session = require("express-session")
 const MongoDbSession = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose')
-const mongoURI = "mongodb://127.0.0.1:27017/se_project"
+const mongoURI = 'mongodb+srv://prathambhatia86:DwkmuuSpt0D67FjF@se.hq1gfta.mongodb.net/?retryWrites=true&w=majority'
 const multer = require('multer')
 let storage = multer.diskStorage({
   destination: 'public/images/',
