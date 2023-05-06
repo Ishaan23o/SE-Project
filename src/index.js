@@ -133,6 +133,7 @@ app.get("/give_feedback_app", feedback_controllers.give_feedback_app)
 app.post("/feedback_submitted", feedback_controllers.feedback_submitted)
 app.post("/given_feedback", feedback_controllers.event_feedback_submitted)
 app.post("/eventFeedback", feedback_controllers.seeEventFeedback);
+app.get("/broadcast",login_controllers.broadcast)
 
 app.get("/profile", async (req, res) => {
   const event_notif = await notification_collection.findOne({ email: req.session.user });

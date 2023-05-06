@@ -104,6 +104,23 @@ async function index(req, res) {
   res.render("index", { event_data: event_notif, image: req.session.profile.profile_image })
 };
 
+async function broadcast(req, res) {
+  const event_notif = await notification_collection.findOne({ email: req.session.user });
+  if ((event_notif !== null) && event_notif.waitlist) {
+    for (var k in event_notif.waitlist) {
+      event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
+        .then((temp1) => {
+          if (temp1.max_limit > temp1.total_registrations) return { name: temp1.event_name, code: temp1.scope.code };
+          else return 'null';
+        })
+    };
+    event_notif.waitlist = event_notif.waitlist.filter((temp) => {
+      return temp != 'null';
+    })
+  }
+  res.render("Broadcast", { event_data: event_notif, image: req.session.profile.profile_image })
+};
+
 async function logout(req, res) {
   req.session.destroy((err) => {
     if (err)
@@ -116,5 +133,5 @@ module.exports = {
   signup,
   login,
   logout,
-  index, profileUpdate
+  index, profileUpdate,broadcast
 }
