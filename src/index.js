@@ -11,6 +11,7 @@ const notification_controllers = require("../controllers/notifications.controlle
 const feedback_controllers = require("../controllers/feedback.controller")
 const signup_collection = require("../models/signup.model")
 const notification_collection = require("../models/notification.model")
+const registration_collection = require("../models/registration.model")
 const event_collection = require("../models/events.model")
 const templates_path = path.join(__dirname, '../templates')
 const session = require("express-session")
@@ -133,7 +134,39 @@ app.get("/give_feedback_app", feedback_controllers.give_feedback_app)
 app.post("/feedback_submitted", feedback_controllers.feedback_submitted)
 app.post("/given_feedback", feedback_controllers.event_feedback_submitted)
 app.post("/eventFeedback", feedback_controllers.seeEventFeedback);
-app.get("/broadcast",login_controllers.broadcast)
+app.get("/broadcast", login_controllers.broadcast)
+
+app.get("/attendeecsv", async (req, res) => {
+  let data = await registration_collection.findOne({ Event_ID: req.query.event });
+  var new_data = [];
+  data.registered = data.registered.slice(1);
+  for (var k of data.registered) {
+    var userData = await signup_collection.findOne({ email: k.email });
+    new_data.push({ name: userData.name, email: userData.email, Organisation: userData.organisation });
+  }
+  function dataToCSV(dataList, headers) {
+    var allObjects = [];
+    allObjects.push(headers);
+    dataList.forEach(function (object) {
+      var arr = [];
+      arr.push(object.name);
+      arr.push(object.email);
+      arr.push(object.Organisation);
+      allObjects.push(arr)
+    });
+    var csvContent = "";
+    allObjects.forEach(function (infoArray, index) {
+      var dataString = infoArray.join(",");
+      csvContent += index < allObjects.length ? dataString + "\n" : dataString;
+    });
+    return csvContent;
+  }
+  res.writeHead(200, {
+    'Content-Type': 'text/csv',
+    'Content-Disposition': 'attachment; filename=*custom_name*.csv'
+  });
+  res.end(dataToCSV(new_data, ["name", "email", "organisation"]), "binary");
+});
 
 app.get("/profile", async (req, res) => {
   const event_notif = await notification_collection.findOne({ email: req.session.user });

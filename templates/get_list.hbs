@@ -419,6 +419,32 @@
             {{/attendee}}
         </tbody>
     </table>
+    <button method='get' onclick='getlist()'>Download Attendee List</button>
+    <script>
+        function getlist() {
+            let xhr = new XMLHttpRequest();
+            xhr.open('GET', '/attendeecsv?event=' + "{{event}}");
+            xhr.responseType = "blob";
+            xhr.send();
+            xhr.onload = function () {
+                if (xhr.status != 200) { // analyze HTTP status of the response
+                    alert(`Error ${xhr.status}: ${xhr.statusText}`); // e.g. 404: Not Found
+                } else { // show the result
+                    var downloadUrl = URL.createObjectURL(xhr.response);
+                    var a = document.createElement("a");
+                    document.body.appendChild(a);
+                    a.style = "display: none";
+                    a.href = downloadUrl;
+                    a.download = "";
+                    a.click();
+                }
+            };
+
+            xhr.onerror = function () {
+                alert("Request failed");
+            };
+        }
+    </script>
 </body>
 
 </html>
