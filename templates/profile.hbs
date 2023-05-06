@@ -400,16 +400,16 @@ body a:hover {
     <!-- partial:index.partial.html -->
     <main class="has-dflex-center">
         <section>
-            <div class="lx-container-70">
+            <div class="lx-container-70" style="margin-right: 500px; width:1900px">
                 <div class="lx-row">
-                    <h1 class="title">Edit your profile</h1>
+                    <h1 class="title" style="margin-left: 400px; color:#f2f5f7; font-weight:900">Edit your profile</h1>
                 </div>
 
-                <div class="lx-row align-stretch">
+                <div class="lx-row align-stretch" style="width: 1200px;" >
                     <form enctype="multipart/form-data" action="/profileUpdate" method='post' id='form1'></form>
-                    <div class="lx-column column-user-pic">
+                    <div class="lx-column column-user-pic"  style="width:900px">
                         <div class="profile-pic bs-md"
-                            style="background-color: antiquewhite; margin-right: 200px; margin-top: 60px;">
+                            style="background-color: antiquewhite; margin-right: 100px; margin-top: 60px; ">
                             <h1 class="pic-label">Profile picture</h1>
 
 
@@ -432,7 +432,7 @@ body a:hover {
 
 
                             <div class="pic-info">
-                                <p><i class="fas fa-exclamation-triangle"></i>&nbsp;&nbsp;This photo will appear on
+                                <p style="font-size:15px"><i class="fas fa-exclamation-triangle"></i>&nbsp;&nbsp;This photo will appear on
                                     the
                                     platform, in your contributions or where it is mentioned.</p>
                             </div>
@@ -441,7 +441,7 @@ body a:hover {
 
 
                     </div>
-                    <div class="lx-column">
+                    <div class="lx-column" style="margin-left: 120px;">
 
 
                         <!-- <div class="fieldset">
@@ -453,64 +453,66 @@ body a:hover {
               <div id="user-id-helper" class="helper"></div>
             </div> -->
                         <form>
-                            <div class="fieldset">
-                                <label for="user-name">Name</label>
-                                <div class="input-wrapper">
-                                    <span class="icon"><i class="fas fa-user"></i></span>
+                            <div class="fieldset" style="font-size:11px; font-weight:bold; ">
+                                <label for="user-name" style="font-size:18px; font-weight:bold; color:rgba(0, 0, 0, 0.8) " >Name</label>
+                                <div class="input-wrapper" style="height:40px; width:270px;">
+                                    <span class="icon"><i class="fas fa-user" style="width: 20px;"></i></span>
                                     <input type="text" name='name' id="user-name" value="{{user.name}}"
-                                        autocomplete="username" required form='form1'>
+                                        autocomplete="username" required form='form1' style="font-weight: bold; font-size:medium" >
                                 </div>
                                 <div id="user-name-helper" class="helper">
                                     <p>Your name can appear on the platform, in your contributions or where it is
                                         mentioned.</p>
                                 </div>
                             </div>
-                            <div class="fieldset">
-                                <label for="email">E-mail</label>
-                                <div class="input-wrapper">
-                                    <span class="icon"><i class="fas fa-envelope"></i></span>
+
+
+                            <div class="fieldset" style="font-size:11px; font-weight:bold;">
+                                <label for="email" style="font-size:18px; font-weight:bold; color:rgba(0, 0, 0, 0.8) ">E-mail</label>
+                                <div class="input-wrapper"  style="height:40px; width:270px;">
+                                    <span class="icon"><i class="fas fa-envelope" style="width: 20px;"></i></span>
                                     <input type="email" id="email" value="{{user.email}}" autocomplete="username"
-                                        readonly form='form1'>
+                                        readonly form='form1' style="font-weight: bold; font-size:medium">
                                 </div>
                                 <div id="email-helper" class="helper"></div>
                             </div>
 
-                            <div class="fieldset">
-                                <label for="cont">Contact</label>
-                                <div class="input-wrapper">
-                                    <span class="icon"><i class="fas fa-key"></i></span>
+                            <div class="fieldset" style="font-size:11px; font-weight:bold;">
+                                <label for="cont" style="font-size:18px; font-weight:bold; color:rgba(0, 0, 0, 0.8) ">Contact</label>
+                                <div class="input-wrapper"  style="height:40px; width:270px;">
+                                    <span class="icon"><i class="fas fa-key" style="width: 20px;"></i></span>
                                     <input type="text" id="cont" value="{{user.contact}}"
-                                        autocomplete="current-password" name='contact' form='form1'>
+                                        autocomplete="current-password" name='contact' form='form1'  style="font-weight: bold; font-size:medium">
                                 </div>
                                 <div id="pass-helper" class="helper"></div>
                             </div>
 
-                            <div class="fieldset">
-                                <label for="pass">New Password</label>
-                                <div class="input-wrapper">
-                                    <span class="icon"><i class="fas fa-key"></i></span>
+                            <div class="fieldset"  style="font-size:11px; font-weight:bold;">
+                                <label for="pass" style="font-size:18px; font-weight:bold; color:rgba(0, 0, 0, 0.8) ">New Password</label>
+                                <div class="input-wrapper"  style="height:40px; width:270px;">
+                                    <span class="icon"><i class="fas fa-key" style="width: 20px;"></i></span>
                                     <input type="password" id="pass" value="" autocomplete="current-password"
-                                        form='form1'>
+                                        form='form1'  style="font-weight: bold; font-size:medium">
                                 </div>
                                 <div id="pass-helper" class="helper"></div>
                             </div>
 
-                            <div class="fieldset">
-                                <label for="pass">Confirm Password</label>
-                                <div class="input-wrapper">
-                                    <span class="icon"><i class="fas fa-key"></i></span>
+                            <div class="fieldset"   style="font-size:11px; font-weight:bold;">
+                                <label for="pass"  style="font-size:18px; font-weight:bold; color:rgba(0, 0, 0, 0.8) ">Confirm Password</label>
+                                <div class="input-wrapper"   style="height:40px; width:270px;">
+                                    <span class="icon"><i class="fas fa-key"  style="width: 20px;"></i></span>
                                     <input type="password" id="pass" value="" name='password'
-                                        autocomplete="current-password" form='form1'>
+                                        autocomplete="current-password" form='form1'  style="font-weight: bold; font-size:medium">
                                 </div>
                                 <div id="pass-helper" class="helper"></div>
                             </div>
 
 
                             <div class="actions">
-                                <a id="cancel" class="lx-btn" href='/'><i class="fas fa-ban"></i>&nbsp;&nbsp;Cancel</a>
-                                <a id="clear" class="lx-btn"><i class="fas fa-broom"></i>&nbsp;&nbsp;Clean</a>
-                                <button type='submit' id="save" class="lx-btn" form='form1'><i
-                                        class="fas fa-save"></i>&nbsp;&nbsp;Save</button>
+                                <a id="cancel" class="lx-btn" href='/' style="height:40px; width:110px"><i class="fas fa-ban" style="font-size:large"></i> <span style="font-size: 12px;">&nbsp;&nbsp;Cancel</span> </a>
+                                {{!-- <a id="clear" class="lx-btn"><i class="fas fa-broom"></i>&nbsp;&nbsp;Clean</a> --}}
+                                <button type='submit' id="save" class="lx-btn" form='form1' style="height:40px; width:110px"><i
+                                        class="fas fa-save" style="font-size:large"></i >  <span style="font-size: 12px;">&nbsp;&nbsp;Save</span></button>
                             </div>
                         </form>
                     </div>
