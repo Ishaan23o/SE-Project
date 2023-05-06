@@ -7,18 +7,60 @@ const mailgen = require("mailgen");
 
 async function edit_event(req, res) {
   let elem = await event_collection.findOne({ 'scope.code': req.body.Edit });
-  res.render('edit_event', { data: elem });
+  const event_notif = await notification_collection.findOne({ email: req.session.user });
+  if ((event_notif !== null) && event_notif.waitlist) {
+    for (var k in event_notif.waitlist) {
+      event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
+        .then((temp1) => {
+          if (temp1.max_limit > temp1.total_registrations) return { name: temp1.event_name, code: temp1.scope.code };
+          else return 'null';
+        })
+    };
+    event_notif.waitlist = event_notif.waitlist.filter((temp) => {
+      return temp != 'null';
+    })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
+  }
+  res.render('edit_event', { data: elem, event_data: event_notif, image: req.session.profile.profile_image });
 }
 async function waitlist(req, res) {
   await notification_collection.findOneAndUpdate({ email: req.session.user }, { $push: { waitlist: req.body.register } }, { upsert: true })
   let find_elem = await event_collection.find({ "scope.scope": "public", "date.event_date": { $gte: new Date() } });
-  res.render("find_event", { data: find_elem });
+  const event_notif = await notification_collection.findOne({ email: req.session.user });
+  if ((event_notif !== null) && event_notif.waitlist) {
+    for (var k in event_notif.waitlist) {
+      event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
+        .then((temp1) => {
+          if (temp1.max_limit > temp1.total_registrations) return { name: temp1.event_name, code: temp1.scope.code };
+          else return 'null';
+        })
+    };
+    event_notif.waitlist = event_notif.waitlist.filter((temp) => {
+      return temp != 'null';
+    })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
+  }
+  res.render("find_event", { data: find_elem, event_data: event_notif, image: req.session.profile.profile_image });
 }
 
 async function delete_event(req, res) {
   await event_collection.findOneAndDelete({ 'scope.code': req.body.Edit });
   await registration_collection.findOneAndDelete({ Event_ID: req.body.Edit });
-  res.render('index')
+  const event_notif = await notification_collection.findOne({ email: req.session.user });
+  if ((event_notif !== null) && event_notif.waitlist) {
+    for (var k in event_notif.waitlist) {
+      event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
+        .then((temp1) => {
+          if (temp1.max_limit > temp1.total_registrations) return { name: temp1.event_name, code: temp1.scope.code };
+          else return 'null';
+        })
+    };
+    event_notif.waitlist = event_notif.waitlist.filter((temp) => {
+      return temp != 'null';
+    })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
+  }
+  res.render('index', { event_data: event_notif, image: req.session.profile.profile_image })
 }
 
 async function edited_event(req, res) {
@@ -58,7 +100,7 @@ async function edited_event(req, res) {
 
   let elem = await event_collection.findOneAndUpdate({ 'scope.code': req.body.code }, { $set: data });
   const event_notif = await notification_collection.findOne({ email: req.session.user });
-  res.render("index", { event_data: event_notif })
+  res.render("index", { event_data: event_notif, image: req.session.profile.profile_image })
 }
 
 
@@ -107,7 +149,21 @@ async function register(req, res) {
       })
     await notification_collection.updateOne({ email: req.session.user }, { $pull: { waitlist: req.body.register } });
     let find_elem = await event_collection.find({ "scope.scope": "public", "date.event_date": { $gte: new Date() } });
-    res.render("find_event", { data: find_elem });
+    const event_notif = await notification_collection.findOne({ email: req.session.user });
+    if ((event_notif !== null) && event_notif.waitlist) {
+      for (var k in event_notif.waitlist) {
+        event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
+          .then((temp1) => {
+            if (temp1.max_limit > temp1.total_registrations) return { name: temp1.event_name, code: temp1.scope.code };
+            else return 'null';
+          })
+      };
+      event_notif.waitlist = event_notif.waitlist.filter((temp) => {
+        return temp != 'null';
+      })
+      if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
+    }
+    res.render("find_event", { data: find_elem, event_data: event_notif, image: req.session.profile.profile_image });
   }
   catch {
     res.send("wrong code");
@@ -118,7 +174,21 @@ async function cancel_registration(req, res) {
   await registration_collection.updateOne({ 'Event_ID': req.body.cancel_register }, { $pull: { 'registered': { 'email': req.session.user } } })
   await event_collection.findOneAndUpdate({ 'scope.code': req.body.cancel_register }, { $inc: { 'total_registrations': -1 } })
   let find_elem = await event_collection.find({ "scope.scope": "public", "date.event_date": { $gte: new Date() } });
-  res.render("find_event", { data: find_elem });
+  const event_notif = await notification_collection.findOne({ email: req.session.user });
+  if ((event_notif !== null) && event_notif.waitlist) {
+    for (var k in event_notif.waitlist) {
+      event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
+        .then((temp1) => {
+          if (temp1.max_limit > temp1.total_registrations) return { name: temp1.event_name, code: temp1.scope.code };
+          else return 'null';
+        })
+    };
+    event_notif.waitlist = event_notif.waitlist.filter((temp) => {
+      return temp != 'null';
+    })
+    if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
+  }
+  res.render("find_event", { data: find_elem, event_data: event_notif, image: req.session.profile.profile_image });
 }
 module.exports = {
   register,

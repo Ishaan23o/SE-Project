@@ -226,7 +226,21 @@ async function show_registered_event(req, res) {
 
   let ids = await individual_registration_collection.findOne({ 'Email': req.session.user })
   if (!ids) {
-    res.render("show_registered_events")
+    const event_notif = await notification_collection.findOne({ email: req.session.user });
+    if ((event_notif !== null) && event_notif.waitlist) {
+      for (var k in event_notif.waitlist) {
+        event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
+          .then((temp1) => {
+            if (temp1.max_limit > temp1.total_registrations) return { name: temp1.event_name, code: temp1.scope.code };
+            else return 'null';
+          })
+      };
+      event_notif.waitlist = event_notif.waitlist.filter((temp) => {
+        return temp != 'null';
+      })
+      if (event_notif.waitlist.length == 0) delete event_notif.waitlist;
+    }
+    res.render("show_registered_events", { event_data: event_notif, image: req.session.profile.profile_image });
   }
   else {
     ids = ids.events;
