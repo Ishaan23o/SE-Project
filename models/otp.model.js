@@ -7,7 +7,6 @@ mongoose.connect("mongodb://127.0.0.1:27017/se_project")
         console.log("failed to connect");
     })
 const sign_up_schema = new mongoose.Schema({
-    
     name:
     {
         type: String,
@@ -32,7 +31,21 @@ const sign_up_schema = new mongoose.Schema({
         data: String,
         contentType: String
     },
+    otp:{
+    type:Number,
+    },
+    authenticated:
+    {
+        type:Boolean,
+    
+    },
+    expireAt: { 
+        type: Date, 
+        default: Date.now,
+       expires: '5m' 
+      }
 }
 )
-const collection = new mongoose.model("Users", sign_up_schema)
+
+const collection = new mongoose.model("otp", sign_up_schema)
 module.exports = collection

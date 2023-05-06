@@ -12,3 +12,4 @@ signInButton.addEventListener('click', () =>
         let obj=await fetch("/signup")
         console.log(obj);
     }
+    

@@ -53,7 +53,7 @@ const isAuth = (req, res, next) => {
     next()
   }
   else
-    res.render("login")
+    res.render("login",{check:0})
 }
 app.get("/", (req, res) => {
   if (req.session.isAuth) {
@@ -66,7 +66,7 @@ app.get("/", (req, res) => {
 
       const check = await signup_collection.findOne({ email: data.email })
       const event_notif = await notification_collection.findOne({ email: data.email });
-      if (event_notif && event_notif.waitlist) {
+      if ((event_notif !== null) && event_notif.waitlist) {
         for (var k in event_notif.waitlist) {
           event_notif.waitlist[k] = await event_collection.findOne({ 'scope.code': event_notif.waitlist[k] })
             .then((temp1) => {
@@ -84,7 +84,7 @@ app.get("/", (req, res) => {
     login_2();
   }
   else
-    res.render("login")
+    res.render("login",{check:0})
 })
 app.get("/new_event", isAuth, async (req, res) => {
   const event_notif = await notification_collection.findOne({ email: req.session.user });
@@ -128,11 +128,10 @@ app.post("/new_event", upload.single('brochure'), event_controllers.create_event
 app.post("/login", login_controllers.login)
 app.get("/reg-ticket", login_controllers.index)
 app.get("/logout", login_controllers.logout)
-
-
 app.get("/give_feedback_app", feedback_controllers.give_feedback_app)
 app.post("/feedback_submitted", feedback_controllers.feedback_submitted)
 app.post("/given_feedback", feedback_controllers.event_feedback_submitted)
+app.post("/check_otp",login_controllers.check_otp)
 app.post("/eventFeedback", feedback_controllers.seeEventFeedback);
 app.get("/broadcast", login_controllers.broadcast)
 
