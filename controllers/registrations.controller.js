@@ -94,7 +94,11 @@ async function edited_event(req, res) {
     var z = {};
     z.email = req.session.user;
     z[y] = x;
-    await notification_collection.updateOne({ email: req.session.user }, { "$set": z }, { upsert: true });
+    var reg = await registration_collection.findOne({ 'Event_ID': req.body.code });
+    for (var k of reg.registered) {
+      if (!k.email) continue;
+      await notification_collection.updateOne({ email: k.email }, { "$set": z }, { upsert: true });
+    }
   }
 
 
