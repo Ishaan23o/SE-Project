@@ -1,4 +1,5 @@
 const express = require("express")
+const https=require("https");
 const app = express()
 const path = require("path")
 const hbs = require("hbs")
@@ -187,10 +188,15 @@ app.get("/profile", async (req, res) => {
 app.get("/notif_clicked", notification_controllers.clicked_notif)
 app.get("/waitlist_clicked", notification_controllers.waitlist_clicked)
 
-app.listen(3000, () => {
-  console.log("port connected");
+// app.listen(3000, () => {
+//   console.log("port connected");
+// })
+https.createServer({
+  key:fs.readFileSync('key.pem'),
+  cert:fs.readFileSync('cert.pem'),
+},app).listen(3000,()=>{
+  console.log(`listening now`);
 })
-
 
 hbs.handlebars.registerHelper('formatTime', function (date, format) {
   var mmnt = moment(date);
