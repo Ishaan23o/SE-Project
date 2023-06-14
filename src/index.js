@@ -20,6 +20,7 @@ const MongoDbSession = require('connect-mongodb-session')(session);
 const mongoose = require('mongoose')
 const mongoURI = 'mongodb+srv://prathambhatia86:DwkmuuSpt0D67FjF@se.hq1gfta.mongodb.net/?retryWrites=true&w=majority'
 const multer = require('multer')
+const helmet=require("helmet");
 let storage = multer.diskStorage({
   destination: 'public/images/',
   filename: (req, file, cb) => {
@@ -42,6 +43,7 @@ app.use(session({
   saveUninitialized: false,
   store: store
 }))
+app.use(helmet());
 app.use(express.json())
 app.set("view engine", "hbs")
 app.set("views", templates_path)

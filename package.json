@@ -25,6 +25,7 @@
     "express-session": "^1.17.3",
     "fs": "^0.0.1-security",
     "hbs": "^4.2.0",
+    "helmet": "^7.0.0",
     "mailgen": "^2.0.27",
     "moment": "^2.29.4",
     "mongoose": "^7.0.3",
